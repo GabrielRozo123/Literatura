@@ -2,7 +2,7 @@
 %  references.bib — Literatura do Mestrado
 %  Gabriel Rozo | FEQ/UNICAMP | 2025-2027
 %  Projeto: CFD de Reator Monolítico para Biodiesel (LHHW)
-%  
+%
 %  Uso no LaTeX:
 %    \bibliography{references}
 %    \bibliographystyle{abntex2-alf}   % padrão ABNT para UNICAMP
@@ -13,125 +13,151 @@
 % --------------------------------------------------------
 
 @article{Noureddini1997,
-  author    = {Noureddini, H. and Zhu, D.},
-  title     = {Kinetics of Transesterification of Soybean Oil},
+  author    = {Noureddini, Hossein and Zhu, D.},
+  title     = {Kinetics of transesterification of soybean oil},
   journal   = {Journal of the American Oil Chemists' Society},
   year      = {1997},
   volume    = {74},
   number    = {11},
   pages     = {1457--1463},
-  doi       = {10.1007/s11746-997-0040-8},
-  note      = {Mecanismo TG→DG→MG→GL; cinética de 2ª ordem; 
-               Ea: 8000–18500 cal/mol. Referência fundacional.}
+  doi       = {10.1007/s11746-997-0254-2},
+  note      = {Mecanismo TG→DG→MG→GL; cinética de 2ª ordem;
+               Ea: 8000–18500 cal/mol. Referência fundacional.
+               Department of Chemical Engineering, University of Nebraska.}
 }
 
 % --------------------------------------------------------
 % [02] REATORES MONOLÍTICOS — TESES BATH
 % --------------------------------------------------------
 
-@phdthesis{Bath_Monolith_SrO,
-  author    = {{University of Bath — Author TBD}},
+@phdthesis{Firth2014,
+  author    = {Firth, Benjamin},
   title     = {Biodiesel Production in Fixed-Bed Monolithic Reactors},
   school    = {University of Bath},
-  year      = {2015},
-  note      = {Monólito cordierita, 61 células/cm², Dh=1.1 mm, 
-               SrO (19.6 wt\%), óleo de canola/MeOH, 120°C, 8 bar, 
-               razão molar 6:1. Completar autor e ano exatos.
-               Disponível em: https://researchportal.bath.ac.uk}
+  year      = {2014},
+  month     = {jul},
+  type      = {Doctoral Thesis ({PhD})},
+  address   = {Bath, United Kingdom},
+  url       = {https://researchportal.bath.ac.uk/en/studentTheses/biodiesel-production-in-fixed-bed-monolithic-reactors},
+  note      = {Orientadores: Stan Kolaczkowski, Matthew Davidson, Serpil Awdry.
+               Monólito cordierita, 61 células/cm², Dh = 1.1 mm,
+               SrO (19.6 wt\%), óleo de canola/MeOH,
+               T = 120°C, P = 8 bar, razão molar 6:1.
+               Centre for Sustainable Chemical Technologies (CSCT).}
 }
 
-@phdthesis{Bath_Monolith_ZnProlina,
-  author    = {{University of Bath — Author TBD}},
+@phdthesis{Asli2011,
+  author    = {Asli, Umi},
   title     = {Catalytic Monoliths for Biodiesel Production},
   school    = {University of Bath},
-  year      = {2017},
-  note      = {Zn-prolina [Zn(C5H8NO2)2] em cordierita (62 células/cm²),
-               dois métodos de coating comparados.
-               Disponível em: https://researchportal.bath.ac.uk}
+  year      = {2011},
+  month     = {feb},
+  type      = {Doctoral Thesis ({PhD})},
+  address   = {Bath, United Kingdom},
+  url       = {https://researchportal.bath.ac.uk/en/studentTheses/catalytic-monoliths-for-biodiesel-production},
+  note      = {Orientador: Stan Kolaczkowski.
+               Zn-prolina [Zn(C5H8NO2)2] em cordierita (62 células/cm²),
+               dois métodos de coating, T = 195°C, P = 20 bar,
+               razão molar MeOH:óleo = 12:1.
+               Leaching de Zn observado — limitação do catalisador.}
 }
 
 % --------------------------------------------------------
 % [03] CFD — BENCHMARK NUMÉRICO
 % --------------------------------------------------------
 
-@article{Pinheiro2024,
-  author    = {Pinheiro, {TBD} and Larimi, {TBD}},
-  title     = {Comparative {CFD} Modeling of Fixed-Bed Reactor ({FBR}) 
-               and Packed-Bed Membrane Reactor ({PBMR}) for Biodiesel Production},
+@article{Omranpour2024,
+  author    = {Omranpour, Sajad and Larimi, Afsanehsadat},
+  title     = {Modeling and simulation of biodiesel synthesis in fixed bed
+               and packed bed membrane reactors using heterogeneous catalyst:
+               a comparative study},
   journal   = {Scientific Reports},
   year      = {2024},
-  note      = {Modelagem 2D, ácido tungstofosfórico sólido,
-               condição ótima: 180°C, razão 15:1, vazão 0.5 mL/min,
-               conversão 99.94\%. Completar autores e DOI.}
+  volume    = {14},
+  pages     = {10153},
+  month     = {may},
+  doi       = {10.1038/s41598-024-60757-5},
+  note      = {Modelagem 2D heterogênea, catalisador ácido tungstofosfórico sólido.
+               Condição ótima: T = 180°C, razão MeOH:óleo = 15:1,
+               vazão = 0.5 mL/min → conversão TG = 99.94\%.
+               Amirkabir University of Technology / Niroo Research Institute.}
 }
 
 % --------------------------------------------------------
-% [04] CINÉTICA — REVISÃO
+% [04] CINÉTICA — REVISÃO TEÓRICA (GRE, MSO, SO, PFO)
 % --------------------------------------------------------
 
-@article{KineticsReview2020,
-  author    = {{Author TBD}},
-  title     = {Kinetics Models of Transesterification: A Review},
+@article{Ezzati2021,
+  author    = {Ezzati, Rohollah and Ranjbar, Shahram and Soltanabadi, Azim},
+  title     = {Kinetics models of transesterification reaction for biodiesel
+               production: {A} theoretical analysis},
   journal   = {Renewable Energy},
-  year      = {2020},
-  note      = {Comparação modelos GRE, MSO, SO e PFO. 
-               Completar autores, volume e DOI.}
+  year      = {2021},
+  volume    = {168},
+  pages     = {280--296},
+  doi       = {10.1016/j.renene.2020.12.055},
+  note      = {Derivação teórica do modelo GRE (General Rate Equation).
+               Demonstra que GRE → SO em tempos curtos; GRE → PFO em
+               altas concentrações de álcool. Ordem de acurácia: GRE > MSO > SO > PFO.}
 }
 
 % --------------------------------------------------------
-% [05] CINÉTICA HETEROGÊNEA — ZnAl2O4
+% [05] CFD EM MICROCANAIS — REVISÃO MDPI ENERGIES
 % --------------------------------------------------------
 
-@article{ZnAl2O4_Kinetics,
-  author    = {{Author TBD}},
-  title     = {Kinetic Parameter Estimation for Triolein/Methanol 
-               Transesterification over {ZnAl$_2$O$_4$}},
-  journal   = {{TBD}},
-  year      = {2018},
-  note      = {Limitação por difusão molecular; excesso de MeOH requerido.
-               Completar referência completa.}
-}
-
-% --------------------------------------------------------
-% [06] CFD EM MICROCANAIS — REVISÕES E ARTIGOS
-% --------------------------------------------------------
-
-@article{MDPIEnergies2024,
-  author    = {{Author TBD}},
-  title     = {Microchannel Reactor Technologies for Biodiesel Production: 
-               A Review},
+@article{Subramaniam2024,
+  author    = {Subramaniam, Koguleshun and
+               Wong, Kang Yao and
+               Wong, Kok Hoe and
+               Chong, Cheng Tung and
+               Ng, Jo-Han},
+  title     = {Enhancing Biodiesel Production: {A} Review of Microchannel
+               Reactor Technologies},
   journal   = {Energies},
   publisher = {MDPI},
   year      = {2024},
-  note      = {CFD em microcanais T-junction, geometrias, padrões de 
-               escoamento. Completar autores e DOI.}
+  volume    = {17},
+  number    = {7},
+  pages     = {1652},
+  month     = {mar},
+  doi       = {10.3390/en17071652},
+  note      = {Revisão de 37 páginas. CFD em microcanais para biodiesel:
+               T-junction, slug flow, regimes de mistura.
+               Alta razão área/volume como diferencial do microreator.}
 }
 
-@article{ChemEngProcess2015,
-  author    = {{Author TBD}},
-  title     = {Numerical Simulations of Biodiesel Synthesis in 
-               Microchannels with Circular Obstructions},
-  journal   = {Chemical Engineering and Processing: Process Intensification},
-  year      = {2015},
-  note      = {Alta razão área/volume; transferência de massa em 
-               microcanais. Completar referência.}
-}
+% --------------------------------------------------------
+% [06] CFD EM MICROCANAIS — SIMULAÇÃO NUMÉRICA (SLUG FLOW)
+% --------------------------------------------------------
 
-@incollection{IntechOpen2019,
-  author    = {{Author TBD}},
-  title     = {Mixing Performance in Microchannel},
-  booktitle = {{TBD}},
-  publisher = {IntechOpen},
-  year      = {2019},
-  note      = {Regime viscoso dominante; mistura controlada por difusão 
-               molecular em microcanais. Completar referência.}
+@article{MohdLaziz2020,
+  author    = {Mohd Laziz, Afiq and
+               KuShaari, Ku Zilati and
+               Azeem, Babar and
+               Yusup, Suzana and
+               Chin, Jitkai and
+               Denecke, Jens},
+  title     = {Rapid production of biodiesel in a microchannel reactor at
+               room temperature by enhancement of mixing behaviour in methanol
+               phase using volume of fluid model},
+  journal   = {Chemical Engineering Science},
+  year      = {2020},
+  volume    = {219},
+  pages     = {115532},
+  doi       = {10.1016/j.ces.2020.115532},
+  note      = {Modelo VOF (Volume of Fluid) para slug flow em microcanal.
+               Demonstra que regime laminar prevalece e mistura é controlada
+               por difusão molecular — justifica abordagem monofásica do projeto.}
 }
 
 % ============================================================
-% ENTRADAS A COMPLETAR:
-%   1. Confirmar autores e anos exatos das teses de Bath
-%   2. Completar DOIs de Pinheiro/Larimi (2024), MDPI, ChemEng
-%   3. Identificar autores dos artigos de revisão
-%   4. Adicionar refs de CHT em microcanais (pasta 04)
-%   5. Adicionar refs de propriedades físicas óleo/MeOH
+% NOTAS DE ATUALIZAÇÃO:
+%   v1.0 (Jun/2026): entradas iniciais com dados completos verificados
+%   Pendências:
+%   - Adicionar refs de transferência de calor conjugada (CHT)
+%     em microcanais e correlações Nu/Sh para canal plano
+%   - Adicionar ref de propriedades físicas óleo de canola/MeOH
+%   - Adicionar ref cinética LHHW específica para catalisador
+%     heterogêneo (ZnAl2O4 ou equivalente)
+%   - Verificar norma ABNT NBR 6023:2018 para formatação final
 % ============================================================
