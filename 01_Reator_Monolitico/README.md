@@ -17,8 +17,8 @@ O reator modelado é um monólito do tipo colmeia (honeycomb) com recheio estrut
 
 | # | Autores | Título | Ano | DOI/Link | Status | Notas |
 |---|---------|--------|-----|----------|--------|-------|
-| 1 | Univ. Bath (Tese) | Biodiesel Production in Fixed-Bed Monolithic Reactors | ~2015 | [Bath Portal](https://researchportal.bath.ac.uk) | 📖 Em leitura | SrO/cordierita, 61 células/cm², Dh=1.1mm, 120°C, 8 bar |
-| 2 | Univ. Bath (Tese) | Catalytic Monoliths for Biodiesel Production | ~2017 | [Bath Portal](https://researchportal.bath.ac.uk) | 🔲 Na fila | Zn-prolina, 62 células/cm², 2 métodos de coating |
+| 1 | Firth (2014) | Biodiesel Production in Fixed-Bed Monolithic Reactors | 2014 | [Bath Portal](https://researchportal.bath.ac.uk/en/studentTheses/biodiesel-production-in-fixed-bed-monolithic-reactors) | ✅ Fichado | SrO (19.6 wt%)/cordierita, 61 células/cm², Dh=1.1mm, T=120°C, P=8 bar, razão 6:1, canola |
+| 2 | Asli (2011) | Catalytic Monoliths for Biodiesel Production | 2011 | [Bath Portal](https://researchportal.bath.ac.uk/en/studentTheses/catalytic-monoliths-for-biodiesel-production) | 🔲 Na fila | Zn-prolina/cordierita, 62 células/cm², T=195°C, P=20 bar, razão 12:1, leaching de Zn observado |
 
 ## Parâmetros de Referência (extraídos da literatura Bath)
 

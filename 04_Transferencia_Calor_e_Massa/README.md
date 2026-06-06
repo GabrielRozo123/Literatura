@@ -16,8 +16,10 @@ A **Fase 2** do modelo acopla:
 
 | # | Autores | Título | Ano | DOI/Link | Status | Notas |
 |---|---------|--------|-----|----------|--------|-------|
-| — | A preencher | — | — | — | 🔲 | Adicionar refs de CHT em microcanais |
-| — | A preencher | — | — | — | 🔲 | Correlações Nu para canal laminar (Nu = 7.54 plano) |
+| 1 | Mohd Laziz et al. | Rapid Production of Biodiesel in a Microchannel Reactor (CES) | 2020 | [10.1016/j.ces.2020.115532](https://doi.org/10.1016/j.ces.2020.115532) | 🔲 Na fila | Demonstra regime laminar com mistura difusiva dominante — Sc >> 1 |
+| 2 | Allain et al. | Kinetic Parameters & Diffusion Coefficients — ZnAl₂O₄ (CEJ) | 2015 | [10.1016/j.cej.2015.07.075](https://doi.org/10.1016/j.cej.2015.07.075) | ⭐ Ref. principal | D_m,i experimentais; Sc_TG≈54000 confirma regime MTL na Fase 2 |
+| — | A preencher | — | — | — | 🔲 | Correlações Nu/Sh para canal plano (Graetz, Lévêque) — solicitar aos orientadores |
+| — | A preencher | — | — | — | 🔲 | Refs de CHT conjugada em microcanais — pendente |
 
 ## Números Adimensionais Relevantes
 

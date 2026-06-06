@@ -17,10 +17,9 @@ Esta pasta sustenta diretamente a **metodologia CFD** da dissertação, especial
 
 | # | Autores | Título | Ano | DOI/Link | Status | Notas |
 |---|---------|--------|-----|----------|--------|-------|
-| 1 | Pinheiro & Larimi | CFD Modeling: FBR vs PBMR for Biodiesel (Sci. Rep.) | 2024 | [Sci. Reports](https://doi.org/10.1038/s41598-024-XXXXX) | 🔲 Na fila | 2D, ácido tungstofosfórico, 180°C, razão 15:1, conv. 99,94% |
-| 2 | MDPI Energies | Microchannel Reactor Technologies for Biodiesel | 2024 | [MDPI](https://www.mdpi.com) | 🔲 Na fila | Revisão recente, T-junction, geometrias, CFD comparativo |
-| 3 | Chem. Eng. Process. | Numerical Simulations in Microchannels with Obstructions | 2015 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila | Alta razão área/volume, transferência de massa |
-| 4 | IntechOpen | Mixing Performance in Microchannel | 2019 | [IntechOpen](https://www.intechopen.com) | 🔲 Na fila | Regime viscoso dominante, mistura por difusão molecular |
+| 1 | Omranpour & Larimi | Modeling and Simulation of Biodiesel Synthesis: FBR vs PBMR (Sci. Rep.) | 2024 | [10.1038/s41598-024-60757-5](https://doi.org/10.1038/s41598-024-60757-5) | ✅ Fichado | Modelo 2D heterogêneo, ácido tungstofosfórico sólido, T=180°C, razão 15:1, conv. 99,94% |
+| 2 | Subramaniam et al. | Enhancing Biodiesel Production: A Review of Microchannel Reactor Technologies | 2024 | [10.3390/en17071652](https://doi.org/10.3390/en17071652) | 🔲 Na fila | Revisão 37 pgs., T-junction, slug flow, alta razão área/volume |
+| 3 | Mohd Laziz et al. | Rapid Production of Biodiesel in a Microchannel Reactor (CES) | 2020 | [10.1016/j.ces.2020.115532](https://doi.org/10.1016/j.ces.2020.115532) | 🔲 Na fila | Modelo VOF, slug flow, mistura controlada por difusão molecular — justifica abordagem monofásica |
 
 ## Conceitos-Chave
 

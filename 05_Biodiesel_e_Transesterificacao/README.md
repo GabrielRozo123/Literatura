@@ -12,8 +12,10 @@ Fundamenta as escolhas de condições operacionais da simulação (T, P, razão 
 
 | # | Autores | Título | Ano | DOI/Link | Status | Notas |
 |---|---------|--------|-----|----------|--------|-------|
-| — | A preencher | — | — | — | 🔲 | Adicionar refs de catalisadores heterogêneos |
-| — | A preencher | — | — | — | 🔲 | Adicionar refs de termoquímica da transesterificação |
+| 1 | Noureddini & Zhu | Kinetics of Transesterification of Soybean Oil (JAOCS) | 1997 | [10.1007/s11746-997-0254-2](https://doi.org/10.1007/s11746-997-0254-2) | ✅ Fichado | Mecanismo TG→DG→MG→GL, 2ª ordem, Ea 8000–18500 cal/mol — fundação mecanística |
+| 2 | Allain et al. | Kinetic Parameters & Diffusion Coefficients — ZnAl₂O₄ (CEJ) | 2015 | [10.1016/j.cej.2015.07.075](https://doi.org/10.1016/j.cej.2015.07.075) | ⭐ Ref. principal | Catalisador sólido ZnAl₂O₄, triolein/MeOH, T=120°C — base da Fase 2 |
+| 3 | Ezzati et al. | Kinetics Models of Transesterification (Ren. Energy) | 2021 | [10.1016/j.renene.2020.12.055](https://doi.org/10.1016/j.renene.2020.12.055) | ✅ Fichado | Derivação teórica GRE; GRE > MSO > SO > PFO em acurácia |
+| — | A preencher | — | — | — | 🔲 | Adicionar refs de termoquímica (ΔH_rxn da transesterificação) |
 
 ## Dados Operacionais de Referência (Literatura Bath)
 

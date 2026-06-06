@@ -29,14 +29,13 @@ Literatura/
 | # | Autores | Título (resumido) | Tipo | Tema | Ano | DOI/Link | Status |
 |---|---------|-------------------|------|------|-----|----------|--------|
 | 1 | Noureddini & Zhu | Kinetics of Transesterification of Soybean Oil | Artigo | Cinética | 1997 | [JAOCS 74:1457](https://doi.org/10.1007/s11746-997-0040-8) | ✅ Lido |
-| 2 | Univ. Bath (Tese) | Biodiesel Production in Fixed-Bed Monolithic Reactors | Tese | Reator Monolítico | ~2015 | [Bath Research Portal](https://researchportal.bath.ac.uk) | 📖 Em leitura |
-| 3 | Univ. Bath (Tese) | Catalytic Monoliths for Biodiesel Production | Tese | Reator Monolítico | ~2017 | [Bath Research Portal](https://researchportal.bath.ac.uk) | 🔲 Na fila |
-| 4 | Pinheiro & Larimi | CFD Modeling of FBR vs PBMR for Biodiesel (Sci. Rep.) | Artigo | CFD + Biodiesel | 2024 | [Nature/Sci.Rep.](https://doi.org/10.1038/s41598-024-XXXXX) | 🔲 Na fila |
-| 5 | Revisão (Ren. Energy) | Kinetics Models of Transesterification | Revisão | Cinética | 2020 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila |
+| 2 | Firth (Bath, Tese) | Biodiesel Production in Fixed-Bed Monolithic Reactors | Tese | Reator Monolítico | 2014 | [Bath Research Portal](https://researchportal.bath.ac.uk/en/studentTheses/biodiesel-production-in-fixed-bed-monolithic-reactors) | ✅ Fichado |
+| 3 | Asli (Bath, Tese) | Catalytic Monoliths for Biodiesel Production | Tese | Reator Monolítico | 2011 | [Bath Research Portal](https://researchportal.bath.ac.uk/en/studentTheses/catalytic-monoliths-for-biodiesel-production) | 🔲 Na fila |
+| 4 | Omranpour & Larimi | Modeling and Simulation of Biodiesel: FBR vs PBMR (Sci. Rep.) | Artigo | CFD + Biodiesel | 2024 | [10.1038/s41598-024-60757-5](https://doi.org/10.1038/s41598-024-60757-5) | ✅ Fichado |
+| 5 | Ezzati et al. | Kinetics Models of Transesterification (Ren. Energy) | Revisão | Cinética | 2021 | [10.1016/j.renene.2020.12.055](https://doi.org/10.1016/j.renene.2020.12.055) | ✅ Fichado |
 | 6 | Allain et al. | Kinetic Parameters & Diffusion Coefficients — Triolein/MeOH/ZnAl₂O₄ | Artigo | Cinética LHHW | 2015 | [CEJ 283:833](https://doi.org/10.1016/j.cej.2015.07.075) | ⭐ Ref. principal |
-| 7 | MDPI Energies | Microchannel Reactor Technologies for Biodiesel | Revisão | CFD + Microcanais | 2024 | [MDPI](https://www.mdpi.com) | 🔲 Na fila |
-| 8 | Chem. Eng. Process. | Numerical Simulations of Biodiesel Synthesis in Microchannels | Artigo | CFD | 2015 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila |
-| 9 | IntechOpen | Mixing Performance in Microchannel | Capítulo | Escoamento Laminar | 2019 | [IntechOpen](https://www.intechopen.com) | 🔲 Na fila |
+| 7 | Subramaniam et al. | Enhancing Biodiesel Production: A Review of Microchannel Reactor Technologies | Revisão | CFD + Microcanais | 2024 | [10.3390/en17071652](https://doi.org/10.3390/en17071652) | 🔲 Na fila |
+| 8 | Mohd Laziz et al. | Rapid Production of Biodiesel in a Microchannel Reactor at Room Temperature (CES) | Artigo | CFD | 2020 | [10.1016/j.ces.2020.115532](https://doi.org/10.1016/j.ces.2020.115532) | 🔲 Na fila |
 
 **Legenda de Status:**
 - ✅ Lido e fichado
