@@ -33,7 +33,7 @@ Literatura/
 | 3 | Univ. Bath (Tese) | Catalytic Monoliths for Biodiesel Production | Tese | Reator Monolítico | ~2017 | [Bath Research Portal](https://researchportal.bath.ac.uk) | 🔲 Na fila |
 | 4 | Pinheiro & Larimi | CFD Modeling of FBR vs PBMR for Biodiesel (Sci. Rep.) | Artigo | CFD + Biodiesel | 2024 | [Nature/Sci.Rep.](https://doi.org/10.1038/s41598-024-XXXXX) | 🔲 Na fila |
 | 5 | Revisão (Ren. Energy) | Kinetics Models of Transesterification | Revisão | Cinética | 2020 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila |
-| 6 | — | Estimação de Parâmetros — ZnAl2O4 (ScienceDirect) | Artigo | Cinética LHHW | ~2018 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila |
+| 6 | Allain et al. | Kinetic Parameters & Diffusion Coefficients — Triolein/MeOH/ZnAl₂O₄ | Artigo | Cinética LHHW | 2015 | [CEJ 283:833](https://doi.org/10.1016/j.cej.2015.07.075) | ⭐ Ref. principal |
 | 7 | MDPI Energies | Microchannel Reactor Technologies for Biodiesel | Revisão | CFD + Microcanais | 2024 | [MDPI](https://www.mdpi.com) | 🔲 Na fila |
 | 8 | Chem. Eng. Process. | Numerical Simulations of Biodiesel Synthesis in Microchannels | Artigo | CFD | 2015 | [ScienceDirect](https://www.sciencedirect.com) | 🔲 Na fila |
 | 9 | IntechOpen | Mixing Performance in Microchannel | Capítulo | Escoamento Laminar | 2019 | [IntechOpen](https://www.intechopen.com) | 🔲 Na fila |
@@ -57,11 +57,14 @@ REATOR MONOLÍTICO (canal 2D representativo)
         │           Validação do ΔP ≈ 0
         │           Re << 1 (escoamento laminar desenvolvido)
         │
-        └── FASE 2: Reação + CHT acoplados
+        └── FASE 2: Reação + Transferência de Massa ✅ CONCLUÍDA
                 └── Surface Reaction (washcoat na parede)
-                    Cinética LHHW (TG → DG → MG → GL)
-                    Transferência de calor conjugada
-                    Reação endotérmica → gradiente de T axial
+                    Cinética Allain 2015 — 2ª ordem reversível
+                    TG + 3 MeOH → DG → MG → GL + 3 FAME
+                    Sc_TG ≈ 54 000 → δ_c ≈ 22 µm (regime MTL)
+                    ΔY_TG = 0.44 entre centro e parede (x=L)
+                    Auto-enriquecimento MeOH: Y_wall 0.18→0.61
+                    Ver: 06_Modelagem_e_Simulacao/FASE2_resultados_CFD.md
 ```
 
 ---
