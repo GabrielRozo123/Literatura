@@ -8,6 +8,14 @@ Metodologia geral de CFD, validação de modelos, tutoriais e documentação do 
 
 Repositório de referências técnicas para a execução direta das simulações no Star-CCM+. Inclui tutoriais Siemens, referências de validação e documentação de configurações específicas.
 
+## Status das Fases
+
+| Fase | Descrição | Status | Documento de Resultados |
+|------|-----------|--------|------------------------|
+| **Fase 1** | Hidrodinâmica a frio — Poiseuille | ✅ Concluída e validada | `FASE1_resultados_CFD.md` |
+| **Fase 2** | Reação + Transferência de Massa | ✅ Concluída | `FASE2_resultados_CFD.md` |
+| Fase 3 | Energia (CHT) + Estudo Paramétrico | 🔲 Pendente (aguarda props. reais) | — |
+
 ## Referências
 
 | # | Autores | Título | Ano | Tipo | Status | Notas |
