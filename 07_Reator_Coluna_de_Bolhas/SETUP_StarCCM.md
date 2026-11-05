@@ -233,7 +233,54 @@ Antes de rodar, crie os relatórios do passo 11.
 
 O que se espera: εG(r) maior no centro, ou com pico na parede se o lift estiver ligado; V_L subindo no centro (≈ 0,25 m/s, Riquarts) e **descendo perto da parede**, com troca de sinal em r ≈ 0,7R ≈ 0,052 m. No 2D axissimétrico essa simetria é forçada, e o perfil tende a ficar mais "comportado" que no 3D.
 
-**(d) Para a plateia:** Scalar Scene da Volume Fraction (Air), com escala de 0 a 0,2 (no 3D, plano XZ em y = 0); vetores da velocidade da Water; Isosurface da Volume Fraction (Water) = 0,5 (superfície livre); `Animation` ou Hardcopy a cada 0,1 s de 10 a 40 s.
+**(d) Para a plateia: cenas e animação** (montar **antes** de rodar, porque os hardcopies são salvos durante a simulação)
+
+*Cena 1: fração de ar*
+
+1. `Scenes → New Scene → Scalar`. Renomeie para `Cena_alpha`.
+2. `Displayers → Scalar 1`: Parts = região `Coluna`; Contour Style = *Smooth Filled*.
+3. `Scalar 1 → Scalar Field`: Function = Volume Fraction (Ar); **Auto Range = Off**, Min = **0**, Max = **0,2** (escala fixa, senão as cores "pulam" de um quadro para outro). Color Map: *blue-red* ou *cool-warm*.
+4. **Coluna inteira (só no 2D):** `Tools → Transforms → New → Reflect`, com Normal = [0, 1, 0] e Origin = [0, 0, 0]. Copie o displayer (botão direito → *Copy*, depois *Paste* em Displayers) e, na cópia, defina **Transform = Reflect 1**. Assim aparece a coluna completa (−R a +R), e não só meia coluna.
+5. Superfície livre: `Derived Parts → New Part → Section → Isosurface`, com Volume Fraction (Água) = **0,5** (no 2D é uma linha). Adicione um *Part Displayer* com essa parte, em preto e com espessura maior.
+6. Vista: View Up = [1, 0, 0] (2D: eixo X para cima) ou [0, 0, 1] (3D). Ajuste o zoom e depois salve a vista (*Save View*), para que todos os quadros tenham o mesmo enquadramento.
+7. Annotations: arraste **Solution Time** para a cena. Opcional: desligue o logo.
+
+*Cena 2: circulação da água*
+
+1. Copie `Cena_alpha` e renomeie para `Cena_vel`. No Scalar: Function = Velocity (Água), componente [0] (2D) ou [2] (3D), com escala fixa de **−0,3 a +0,3 m/s** e Color Map divergente (*blue-red*: azul desce, vermelho sobe).
+2. `Displayers → New Displayer → Vector`: Function = Velocity (Água). No 2D, **Display Mode = Line Integral Convolution (LIC)** fica muito bonito; senão use Glyph com espaçamento uniforme.
+
+*Salvar quadros (hardcopy) durante a simulação*
+
+Em cada cena: `Cena_alpha → Attributes → Update`:
+
+| Propriedade | Valor |
+|-------------|-------|
+| Trigger / Update Frequency | Time Step, **a cada 20 passos** (= 0,1 s com Δt = 0,005 s) |
+| Save To File | ✅ |
+| Directory | ex.: `C:\...\frames\alpha` (uma pasta por cena) |
+| Resolution | 2D vertical: **800 × 1600**; 3D: 1000 × 1600 |
+
+De 0 a 40 s isso dá cerca de 400 quadros, ou ~20 s de vídeo a 20 fps. **Comece em t = 0**: a "chegada" das bolhas no líquido parado e a subida da superfície livre é a parte mais didática.
+
+> Alternativa: `Solution Histories → New` (.simh) com Volume Fraction e Velocity a cada 20 passos. Depois dá para re-renderizar qualquer cena sem rodar de novo, pelo botão de animação da barra de ferramentas e *Export / Write Movie*. Ocupa mais disco, mas permite mudar a cena depois.
+
+*Montar o vídeo (Python)*
+
+```bash
+python monta_animacao.py --cena1 frames/alpha --cena2 frames/vel --dt-quadro 0.1 --fps 20 --saida coluna_Ug2
+```
+
+Saída: `coluna_Ug2.mp4` (para o PowerPoint) e `coluna_Ug2.gif`, com as duas cenas lado a lado e "t = xx s" escrito em cada quadro.
+
+*Figuras de pós-processamento para os slides*
+
+| Figura | Como gerar |
+|--------|------------|
+| εG(t) "enchendo" até o patamar | o plot `Holdup Global` do próprio STAR (Export → PNG) |
+| εG CFD × correlações × experimento | `python compara_cfd_literatura.py --pasta star_exports --t-media 20` |
+| Perfis radiais εG(r) e V_L(r) | `python perfis_radiais.py --alpha star_exports/perfil_alpha_Ug2.csv --vl star_exports/perfil_vL_Ug2.csv --Ug 0.02` |
+| Campo médio | cenas com `Mean of ...` (Field Mean): fração média e V_L média, mostrando a circulação "gulf stream" |
 
 **Rodar:** clique em `Run`. Ao final, salve o .sim.
 
