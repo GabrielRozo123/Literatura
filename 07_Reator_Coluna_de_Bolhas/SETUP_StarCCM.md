@@ -209,7 +209,29 @@ Antes de rodar, crie os relatórios do passo 11.
 
 **(b) Conferência:** `Reports → Maximum` de `Centroid[0]` (3D: `[2]`) em `Dispersao`. Ele deve ficar perto de H0/(1−εG) ≈ 0,95–0,96 m.
 
-**(c) Médias temporais:** `Solvers → New → Field Mean Monitor`, com Start Time = **20 s**, para Volume Fraction (Air) e Velocity (Water). Depois crie uma `Line Probe` na metade da altura (x = 0,6 m no 2D, de y = 0 a 0,075 m; z = 0,6 m no 3D, de x = −0,075 a +0,075 m) e um XY Plot dos campos médios, como os plots *Volume Fraction of Air* e *Axial Velocity of Air* do tutorial.
+**(c) Médias temporais:**
+
+1. Botão direito em **`Monitors` → `New Monitor` → `Field Mean Monitor`** (fica em *Monitors*, não em *Solvers*). Crie dois:
+
+   | Monitor | Field Function | Parts |
+   |---------|----------------|-------|
+   | `Media_alphaAr` | Volume Fraction da Air | `Coluna` |
+   | `Media_vAgua` | componente **axial** da Velocity da Water: `[0]` no 2D, `[2]` no 3D | `Coluna` |
+
+   Se o seletor não aceitar o vetor, crie uma Scalar Field Function com o componente (autocompletar → *Velocity of Water* → `[0]`).
+2. Em cada monitor: **Trigger** = Time Step e **Start** (nó *Update* / *Start Time*) = **20 s**. Cada monitor cria a field function `Mean of ...`, que pode ser usada em cenas e plots.
+3. `Derived Parts → New Part → Probe → Line`, com Resolution = **50**:
+
+   | Probe | 2D axissimétrico (eixo X, raio Y) | 3D (eixo Z) |
+   |-------|-----------------------------------|-------------|
+   | `Radial_z060` (principal) | Point 0 = [0,6, 0,0, 0,0] · Point 1 = [0,6, 0,0745, 0,0] m | [−0,0745, 0,0, 0,6] → [0,0745, 0,0, 0,6] m |
+   | `Radial_z030` (opcional) | [0,3, 0,0, 0,0] → [0,3, 0,0745, 0,0] m | [−0,0745, 0,0, 0,3] → [0,0745, 0,0, 0,3] m |
+   | `Axial_centro` (opcional) | [0,0, 0,001, 0,0] → [1,2, 0,001, 0,0] m | [0,0, 0,0, 0,0] → [0,0, 0,0, 1,2] m |
+
+   Ficar em 0,0745 (e não 0,075) evita que o último ponto caia exatamente na parede. Com z = 0,6 m (H/D = 4) a medida fica longe do aspersor e da superfície livre (≈ 0,95 m).
+4. `Plots → New Plot → XY Plot`, com Parts = `Radial_z060`. X Type: *Direction* [0, 1, 0] no 2D (raio) ou [1, 0, 0] no 3D. Y Types: `Mean of Volume Fraction (Air)` em um plot e `Mean of Velocity[0] (Water)` em outro. Exporte como `perfil_alpha_Ug2.csv` e `perfil_vL_Ug2.csv`.
+
+O que se espera: εG(r) maior no centro, ou com pico na parede se o lift estiver ligado; V_L subindo no centro (≈ 0,25 m/s, Riquarts) e **descendo perto da parede**, com troca de sinal em r ≈ 0,7R ≈ 0,052 m. No 2D axissimétrico essa simetria é forçada, e o perfil tende a ficar mais "comportado" que no 3D.
 
 **(d) Para a plateia:** Scalar Scene da Volume Fraction (Air), com escala de 0 a 0,2 (no 3D, plano XZ em y = 0); vetores da velocidade da Water; Isosurface da Volume Fraction (Water) = 0,5 (superfície livre); `Animation` ou Hardcopy a cada 0,1 s de 10 a 40 s.
 
