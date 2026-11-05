@@ -27,6 +27,7 @@ PASTA_TEMAS = [
     "04_Transferencia_Calor_e_Massa",
     "05_Biodiesel_e_Transesterificacao",
     "06_Modelagem_e_Simulacao",
+    "07_Reator_Coluna_de_Bolhas",
 ]
 
 

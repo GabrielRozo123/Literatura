@@ -19,6 +19,7 @@ Literatura/
 ├── 04_Transferencia_Calor_e_Massa/ → CHT, difusão, Nusselt, Sherwood em escoamento laminar
 ├── 05_Biodiesel_e_Transesterificacao/ → Processo, catalisadores heterogêneos, condições de reação
 ├── 06_Modelagem_e_Simulacao/       → Metodologia CFD geral, validação, Star-CCM+
+├── 07_Reator_Coluna_de_Bolhas/     → Seminário de Cinética: projeto + CFD Euler–Euler de coluna de bolhas
 └── references.bib                  → Arquivo BibTeX unificado (LaTeX-ready)
 ```
 
