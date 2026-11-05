@@ -145,12 +145,14 @@ Em `Regions → Coluna → Boundaries`, defina o **Type** de cada fronteira e, e
 
 | Fronteira | Type | Air | Water |
 |-----------|------|-----|-------|
-| `Aspersor` | 🔁 **Velocity Inlet** | Physics Values → Volume Fraction = **1**; Velocity Magnitude = **0,02 m/s** (= U_G) | Volume Fraction = **0**; Velocity Magnitude = 0,02 m/s (sem efeito, pois α = 0); Turbulence Specification = Intensity + Length Scale, **0,005 m** (como no tutorial) |
+| `Aspersor` | 🔁 **Velocity Inlet** | Volume Fraction = **0,1**; Velocity Magnitude = **0,2 m/s** (fluxo de gás = 0,1 × 0,2 = U_G = 0,02 m/s) | Volume Fraction = **0,9**; Velocity Magnitude = **0** (sem vazão de líquido) |
 | `Topo` | 🔁 **Pressure Outlet**, 0 Pa | Backflow Volume Fraction = **1** | Backflow Volume Fraction = **0** |
 | `Parede` | Wall (No-slip) | — | — |
 | `Eixo` (só 2D) | **Axis** | — | — |
 
 > 🔁 No tutorial a mistura **atravessa** o tubo (80 % de água a 1,23 m/s + 20 % de ar a 1,61 m/s, saída tipo *Outlet*). Na coluna o líquido fica **em batelada**: só entra gás, que sai pelo topo. Como o aspersor cobre o fundo inteiro com α_ar = 1, Q_gás = U_G · A, a mesma definição usada nas correlações.
+
+> ⚠️ **Não injete ar puro (α = 1) no fundo inteiro.** Testado no 2D: forma-se uma **camada contínua de gás** sob a água, que é instável (Rayleigh–Taylor). O cisalhamento dessa camada gera turbulência artificial (razão de viscosidade turbulenta ~1e5) e o cálculo diverge em menos de 1 s. A entrada correta é uma mistura **diluída** com o gás subindo a uma velocidade próxima da de deslizamento da bolha (U∞ ≈ 0,23 m/s): α_ar = U_G/0,2. Para 1, 2 e 4 cm/s, use α = 0,05, 0,10 e 0,20, sempre com v_ar = 0,2 m/s. A vazão de gás continua sendo exatamente U_G·A.
 
 ## 9. Condições iniciais (= *Setting Initial Conditions...*, passo 1)
 
