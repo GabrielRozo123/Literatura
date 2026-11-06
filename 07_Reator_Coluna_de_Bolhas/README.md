@@ -7,8 +7,9 @@
 | Equações de projeto + exemplo numérico | `Programacao/coluna_bolhas/projeto_coluna_bolhas.py` |
 | Passo a passo do caso no STAR-CCM+ | [`SETUP_StarCCM.md`](SETUP_StarCCM.md) |
 | Pós-processamento CFD × literatura | `Programacao/coluna_bolhas/compara_cfd_literatura.py` |
+| **Equações cinéticas de projeto** (regimes, Hatta, E, modelos de reator, exemplos O₂ e CO₂/NaOH) | [`EQUACOES_PROJETO_CINETICA.md`](EQUACOES_PROJETO_CINETICA.md) |
 | **Resultados das rodadas CFD 2D** | [`RESULTADOS_CFD_2D.md`](RESULTADOS_CFD_2D.md) |
-| Dados experimentais (a preencher) | `Programacao/coluna_bolhas/dados_experimentais.csv` |
+| Dados experimentais (Mudde 2009 via Draw & Rzehak 2024; Besagni & Inzoli 2016) | `Programacao/coluna_bolhas/dados_experimentais.csv` |
 
 ---
 
@@ -139,15 +140,17 @@ Draw & Rzehak (2024) mostram que o modelo "baseline" do HZDR funciona até εG �
 
 | # | Referência | Por que interessa | Status |
 |---|------------|-------------------|--------|
-| 1 | Draw & Rzehak (2024), *IJMF* 181:104969 | Euler–Euler × experimento, coluna redonda D = 0,288 m, H = 2,5 m, regime homogêneo até εG ~ 50% | 🔲 Pegar PDF (acesso aberto) |
+| 1 | Draw & Rzehak (2024), *IJMF* 181:104969 | Euler–Euler (OpenFOAM, baseline HZDR) × experimento de **Mudde et al. (2009)**: coluna **D = 0,15 m**, H = 1,3 m, 599 agulhas, εG tabelado (Tab. 2), bolhas de 3,5–5 mm; entrada com α·0,2 m/s (igual à nossa) | ✅ Fichado |
 | 2 | Sommer et al. (2023), *Chem. Eng. Technol.* — Hydrodynamics in a Bubble Column, Part 1 | Banco de dados HZDR para validar CFD: d_b, εG, velocidades vs. U_G e diâmetro do orifício | 🔲 Pegar PDF |
 | 3 | (autores a conferir, 2023), *J. Braz. Soc. Mech. Sci. Eng.* 45(10), doi:10.1007/s40430-023-04433-1 — εG global experimental × CFD | Brasileiro (FAPESP), coluna quadrada; mostra que a força de sustentação melhora o εG | 🔲 Conferir autores/PDF |
-| 4 | Besagni & Inzoli (2016), *CES* 146:259–290 | D = 0,24 m, H = 5,3 m, U_G de 0,004 a 0,20 m/s: εG global, transição, d_b | 🔲 Pegar PDF |
+| 4 | Besagni & Inzoli (2016), *CES* 146:259–290 | D = 0,24 m, spider (furos 1–3,5 mm): εG × U_G (Fig. 5/14), correlação própria (Eq. 31), U_trans = 0,0264 m/s, bolhas de 2,5–4 mm | ✅ Fichado |
 | 5 | Besagni, Inzoli & Ziegenhein (2018), *ChemEngineering* 2:13 | Revisão completa: regimes, correlações, kLa | 🔲 Ler (acesso aberto) |
 | 6 | Rzehak, Krauß, Kováts & Zähringer (2017), *IJMF* — "Fluid dynamics in a bubble column: new experiments and simulations" | Modelo "baseline" HZDR de forças interfaciais × experimento (dados citados de memória: conferir) | 🔲 |
 | 7 | Deen, Solberg & Hjertager (2001), *CES* 56:6341 | Benchmark clássico (coluna quadrada de 0,15 m), muito usado com o STAR-CCM+ | Referência |
 | — | Akita & Yoshida (1973, 1974); Hikita et al. (1980); Shah et al. (1982); Deckwer et al. (1974); Wilkinson et al. (1992); Tomiyama et al. (2002); Levenspiel (1999) | Equações de projeto (seção 2) | Usadas no script |
 
-> ⚠️ O ambiente de nuvem onde este material foi preparado não conseguiu abrir o texto completo dos artigos 1–5. As tabelas de εG × U_G ainda **não** foram extraídas. Baixe os PDFs pela UNICAMP (Portal CAPES) e preencha `dados_experimentais.csv`, usando a tabela do artigo ou digitalizando a figura com o WebPlotDigitizer.
+| ❌ | Abd Ali (2014), *IJSER* 5(4):904 — "CFD simulation of bubbly flow through a bubble column" (COMSOL) | **Descartado:** periódico sem revisão rigorosa, sem validação experimental nem dados de malha/convergência; Δt = 2 s. Serve só como exemplo de acoplamento com dois filmes no CFD | ❌ |
+
+> ✅ Dados extraídos para `Programacao/coluna_bolhas/dados_experimentais.csv`: Mudde et al. (2009) (tabela de Draw & Rzehak 2024, valores exatos) e Besagni & Inzoli (2016) (digitalizados da Fig. 14, ±10 %). As demais referências ainda estão na fila.
 
 Entradas BibTeX: `references.bib` (bloco "07 — COLUNA DE BOLHAS"). Os campos marcados `TBD` ainda precisam ser conferidos.

@@ -44,11 +44,33 @@
 
 O CFD fica **dentro da faixa das correlações** (0,055–0,105), mais perto do limite homogêneo ideal.
 
+## 3b. Validação com dados experimentais recentes
+
+Figura: `Programacao/coluna_bolhas/resultados/fig_cfd_vs_literatura.png`
+
+| Experimento | Coluna / aspersor | εG a 2 cm/s | CFD (0,086), desvio |
+|-------------|-------------------|-------------|---------------------|
+| **Mudde et al. (2009)**, via Draw & Rzehak (2024), Tab. 2 | **D = 0,15 m** (igual à nossa), 599 agulhas → distribuição **uniforme** | **0,089** (interpolado entre 0,076 a 1,7 cm/s e 0,11 a 2,5 cm/s) | **−3 %** |
+| **Besagni & Inzoli (2016)**, Fig. 14 | D = 0,24 m, *spider* com furos de 1–3,5 mm → **má distribuição** | **0,069** (digit.) / 0,061 (Eq. 31 dos autores) | +25 % / +40 % |
+
+**Leitura física (o resultado mais importante do trabalho):**
+
+- **Experimentalmente,** com a mesma vazão de gás e colunas de porte parecido, o tipo de aspersor muda εG em ~30 % (0,069 → 0,089).
+  - As agulhas de Mudde dão um regime homogêneo "verdadeiro": a curva εG × U_G segue o limite homogêneo ideal até ~4 cm/s, com circulação de líquido quase nula (0,004–0,02 m/s no eixo).
+  - O aspersor *spider* de Besagni gera circulação e segue as correlações clássicas.
+- **O CFD com distribuição uniforme reproduz o caso das agulhas com −3 %.** Draw & Rzehak (2024) obtiveram o mesmo comportamento com o modelo *baseline* do HZDR: εG ≈ 0,067 para J_G = 1,5 cm/s (exp. 0,061) e velocidade do líquido no eixo de 0,008–0,03 m/s para bolhas de 3,5–5 mm (Tab. 6).
+- **Confirmações independentes das nossas escolhas de modelo:**
+  - a entrada diluída com o gás a 0,2 m/s é **idêntica** à usada por Draw & Rzehak;
+  - o diâmetro de 5 mm está dentro da faixa medida (3,5–5 mm em Mudde; 2,5–4 mm em Besagni);
+  - a pouca circulação no caso uniforme é física, e não um defeito do 2D.
+- **O caso do aspersor *spider* (circulação forte) é o que o 2D axissimétrico não captura bem.** Ele exigiria o 3D ou um aspersor não uniforme mais realista.
+- **Sensibilidade ao diâmetro (Draw & Rzehak, Tab. 6):** de 5 para 5,75 mm, o coeficiente de lift troca de sinal e εG cai 20 %. Isso é coerente com o nosso slide de sensibilidade ao diâmetro de bolha.
+
 ## 4. Conclusões para o seminário
 
 1. **O diâmetro de bolha controla εG.** De 1 mm para 5 mm, εG cai pela metade (0,172 → 0,086). Num modelo monodisperso, o diâmetro é um *dado de entrada*. Isso motiva modelos de balanço populacional (S-Gamma).
 2. **O aspersor e as forças entre as fases controlam a circulação.** A mesma vazão de gás produz desde nenhuma circulação (rodada 2) até ~0,09 m/s com inversão em r/R = 0,7 (rodada 4). A circulação é a origem física do D_L do modelo de dispersão axial, que entra na equação de projeto (Pe ≈ 0,3, ou seja, a fase líquida se comporta quase como um CSTR).
-3. **εG global é pouco sensível à circulação no 2D** (0,086–0,088 nas rodadas 2 a 4). O principal motivo de ele ficar acima de Akita & Yoshida e de Hikita é o diâmetro de bolha suposto. As correlações foram ajustadas em colunas reais, com distribuição de tamanhos e regiões heterogêneas.
+3. **εG global é pouco sensível à circulação no 2D** (0,086–0,088 nas rodadas 2 a 4). O CFD com aspersor uniforme concorda com o experimento de aspersor uniforme (Mudde, −3 %). Akita & Yoshida e Hikita ficam abaixo porque representam aspersores grosseiros com circulação (Besagni: 0,069). Ver seção 3b.
 4. **Limitação do 2D axissimétrico.** A circulação no eixo (0,06–0,09 m/s) ficou cerca de 3× abaixo de Riquarts (0,25 m/s). A pluma oscilante, que alimenta a circulação real, só existe em 3D.
 5. **Lição numérica.** A primeira tentativa, com ar puro (α = 1) no fundo inteiro, formou uma camada de gás instável e divergiu. A condição de contorno tem de respeitar a física do aspersor.
 
@@ -76,7 +98,7 @@ Com Da = 1,8, os limites são X_CSTR = 0,64 e X_PFR = 0,84.
 
 - [ ] Pontos de U_G = 1 e 4 cm/s (α na entrada = 0,05 e 0,20) para a curva εG × U_G
 - [ ] Caso 3D (malha de 7,5 mm) para o vídeo da pluma e a circulação real
-- [ ] Dados experimentais recentes em `dados_experimentais.csv` (artigos na pasta 07, a baixar via CAPES)
+- [x] Dados experimentais recentes em `dados_experimentais.csv` (Mudde 2009 / Draw & Rzehak 2024; Besagni & Inzoli 2016)
 - [ ] (Opcional) S-Gamma para a distribuição de tamanho de bolhas
 
 > Observação sobre os perfis: a vazão líquida líquida na seção da rodada 4 dá +13 % da vazão ascendente (o ideal seria ≈ 0). Isso indica que a média de 18 s (~2 voltas de circulação) ainda carrega incerteza estatística nos perfis locais. O εG global não é afetado.
