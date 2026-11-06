@@ -102,3 +102,28 @@ Com Da = 1,8, os limites são X_CSTR = 0,64 e X_PFR = 0,84.
 - [ ] (Opcional) S-Gamma para a distribuição de tamanho de bolhas
 
 > Observação sobre os perfis: a vazão líquida líquida na seção da rodada 4 dá +13 % da vazão ascendente (o ideal seria ≈ 0). Isso indica que a média de 18 s (~2 voltas de circulação) ainda carrega incerteza estatística nos perfis locais. O εG global não é afetado.
+
+---
+
+## 7. Caso 3D (rodada 5): mesma física da rodada 4
+
+Figura: `Programacao/coluna_bolhas/resultados/fig_2D_vs_3D.png`, script `figura_2D_vs_3D.py`. Dados em `resultados_cfd_3D/`.
+
+**Configuração:** cilindro 3D, D = 0,15 m, H = 1,2 m, H0 = 0,9 m. Malha Trimmer de 7,5 mm (~50 mil células). Aspersor parabólico (média de α = 0,1 a 0,2 m/s, ou seja U_G = 2 cm/s), d = 5 mm, lift −0,05, Mixture k-ε. Simulado até **t = 28,8 s**; média temporal de 15 a 28,8 s.
+
+| Grandeza | 2D (rodada 4) | **3D (rodada 5)** | Experimento / referência |
+|----------|---------------|-------------------|--------------------------|
+| εG global | 0,0856 | **0,0889 ± 0,0001** | Mudde (agulhas) 0,089 · Besagni (spider) 0,069 |
+| α no eixo / na parede | 0,081–0,086 / 0,067–0,075 | 0,091 / 0,081 | — |
+| V_L no eixo | +0,056 m/s | **+0,059 m/s** | Riquarts 0,25 m/s · Mudde 0,004–0,02 m/s |
+| V_L junto à parede | −0,09 m/s | −0,08 m/s (−0,06 a −0,11 entre raios) | — |
+| Inversão do V_L | r/R = 0,70 | r/R ≈ 0,61 | ≈ 0,7 |
+
+**Leitura:**
+
+1. **O 3D confirmou o 2D:** εG mudou só 4 % (0,086 → 0,089) e a circulação ficou praticamente igual. O 2D axissimétrico **não** era o responsável pela circulação fraca.
+2. **A coluna ficou quase estacionária também em 3D** (σ do holdup = 0,0001). Não apareceu uma pluma serpenteando. Com bolhas de 5 mm, aspersor distribuído e k-ε (RANS), o escoamento fica no regime homogêneo, sem estruturas de grande escala. A literatura atribui a dinâmica forte a bolhas maiores que ~5,8 mm (lift negativo, Lucas et al. 2005; Draw & Rzehak 2024, Tab. 6) e/ou a modelos de turbulência menos dissipativos (LES).
+3. **Validação:** εG em 3D coincide com o experimento de aspersor uniforme (**Mudde: 0,089, desvio < 1 %**). O modelo representa bem uma coluna homogênea com aspersor fino, e não a coluna com aspersor grosseiro de Besagni (0,069). Para esta seriam necessários a geometria do *spider* e a distribuição de tamanhos de bolha (S-Gamma ou duas classes).
+4. **Estatística:** a média de 15 a 28,8 s (~1,5 volta de circulação) ainda mostra assimetria entre os 4 raios (faixa sombreada) e uma vazão líquida líquida diferente de zero na sonda. **Os perfis locais são indicativos.** O εG global é robusto.
+
+**Mensagem para a apresentação:** *"Em 2D ou em 3D, o modelo reproduz a coluna homogênea com aspersor uniforme (−3 % e < 1 %). A diferença em relação às correlações clássicas vem do aspersor e do tamanho das bolhas, não da dimensionalidade do modelo."* Isso leva a três próximos passos: S-Gamma (tamanho de bolha calculado), geometria real do aspersor e LES para a dinâmica da pluma.
