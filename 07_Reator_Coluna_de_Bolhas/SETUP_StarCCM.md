@@ -407,3 +407,56 @@ Os dois diâmetros dão uma ideia da simetria da média. O `perfis_radiais.py` a
 | εG | 0,086 | ? | Besagni (spider) 0,069; Mudde (agulhas) 0,089 |
 | V_L no eixo | 0,06 m/s | ? | Riquarts 0,25 m/s |
 | Inversão do V_L | r/R = 0,70 | ? | ≈ 0,7 |
+
+## 17. Renderização volumétrica da pluma (adaptado do tutorial *Volume Rendering: Steckler Room*, 2602)
+
+**0. Field function sem o espaço de ar.** Senão o topo, com α_ar = 1, vira um bloco sólido. Use o autocompletar para os nomes das fases:
+
+```
+FF_alphaBolhas : (${Volume Fraction of Água} >= 0.5) ? ${Volume Fraction of Ar} : 0
+```
+
+**1. Resampled Volume** (como em *Setting Up the Resampled Volume*): `Derived Parts → New → Resampled Volume`
+
+| Propriedade | Tutorial | **Coluna** |
+|-------------|----------|------------|
+| Input Parts | Room, Fire | **Coluna** |
+| Cell Size to Voxel Ratio | 1,0 | 1,0 |
+| Minimum Voxel Size | 0,01 m | **0,0025 m** (≈ 3 voxels por célula de 7,5 mm) |
+| Display | New Scalar Displayer | New Scalar Displayer (numa cena nova `Cena_Volume`) |
+
+Clique em **Preview**: o número de voxels deve ficar entre ~1 e 2 milhões (faixa recomendada: 1–10 M). Se passar de 10 M, aumente o Minimum Voxel Size para 0,004 m.
+
+**2. Escalar** (como em *Adjusting the Scalar*; não precisa de unidade customizada, porque α é adimensional): em `Resampled Volume Scalar 1`, Representation = Volume Mesh; Scalar Field → Function = `FF_alphaBolhas`, Clip = Disabled, **Min = 0,02, Max = 0,20**. Desligue o displayer escalar antigo (*Toggle Visibility*).
+
+**3. Mapa de cores** (como em *Setting Up a Color Map*): `Tools → Color Maps → New`, Color Space = RGB, 5 pontos, nome `bolhas_ramp`:
+
+| Position | R | G | B | Ideia |
+|----------|---|---|---|-------|
+| Left Limit | 245 | 250 | 255 | quase branco (pouco gás) |
+| 0,25 | 173 | 216 | 230 | azul-claro |
+| 0,5 | 100 | 149 | 237 | azul médio |
+| 0,75 | 30 | 80 | 200 | azul forte |
+| Right Limit | 10 | 25 | 110 | azul-escuro (núcleo da pluma) |
+
+No `Color Bar` do Resampled Volume Scalar, coloque Color Map = `bolhas_ramp`.
+
+**Se a coluna aparecer como um bloco opaco** (como na imagem intermediária do tutorial, "room is filled"), falta o passo de **opacidade/transparência** do tutorial, que não estava nas páginas recebidas. É ele que deixa transparente o líquido com pouco gás. Envie a página seguinte do tutorial.
+
+**4. Acabamento:** Outline da coluna (linha cinza), Isosurface da água em 0,5 (superfície livre, cinza-claro e semitransparente), anotação *Solution Time*, vista isométrica levemente de lado. Hardcopy a cada 20 passos a partir de t = 3 s.
+
+## 18. Solution History (gravar para re-renderizar sem rodar de novo)
+
+Configure **antes de rodar**. O histórico só grava a partir do momento em que é criado.
+
+1. `Solution Histories → New` → arquivo `cinetica_3D.simh`.
+2. Functions: Volume Fraction of Ar, Volume Fraction of Água, Velocity of Água, `FF_alphaBolhas`. Regions/Parts: `Coluna` (e/ou o Resampled Volume, como o tutorial faz com *FireandSmokeResampledData*).
+3. Update: Time Step, Frequency = **20** (0,1 s), Start ≈ **1800** (t = 3 s).
+4. Disco: ≈ 50 mil células × 6 campos × 8 bytes ≈ 2,4 MB por gravação. Com ~570 gravações dá **~1,5 GB**.
+
+**Depois da rodada** (como em *Creating a Recorded Solution View*):
+
+- no displayer, Representation = a representação gravada (o nome do .simh);
+- em `Attributes → Annotations → Solution Time`, use a mesma representação;
+- em `Solution Views → (nome) → Solution Time`, escolha o instante;
+- para animar, use a reprodução da Solution View e exporte o filme (barra de animação). O alternativo é exportar imagens e juntar com `monta_animacao.py`.
