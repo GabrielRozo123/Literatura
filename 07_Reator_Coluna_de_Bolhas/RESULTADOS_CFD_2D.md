@@ -52,7 +52,27 @@ O CFD fica **dentro da faixa das correlações** (0,055–0,105), mais perto do 
 4. **Limitação do 2D axissimétrico.** A circulação no eixo (0,06–0,09 m/s) ficou cerca de 3× abaixo de Riquarts (0,25 m/s). A pluma oscilante, que alimenta a circulação real, só existe em 3D.
 5. **Lição numérica.** A primeira tentativa, com ar puro (α = 1) no fundo inteiro, formou uma camada de gás instável e divergiu. A condição de contorno tem de respeitar a física do aspersor.
 
-## 5. Pendências / próximos passos
+## 5. Impacto nas equações de projeto (cinética + transferência de massa)
+
+Script: `Programacao/coluna_bolhas/cfd_para_projeto.py`, figura `resultados/fig_cfd_para_projeto.png`. Exemplo: reação de pseudo-1ª ordem no líquido, k1 = 0,01 1/s (Ha = 0,013, regime lento), u_L = 5 mm/s.
+
+| Caso | εG | a [1/m] | kLa [1/s] | k1εL/kLa | k_ef [1/s] | D_L [m²/s] | Pe | X |
+|------|-----|---------|-----------|----------|------------|------------|-----|---|
+| Correlações (A&Y + Deckwer) | 0,055 | — | 0,0135 | 0,70 | 0,0056 | 0,0147 | 0,32 | 0,66 |
+| Shah + Deckwer | 0,055 | — | 0,0189 | 0,50 | 0,0063 | 0,0147 | 0,32 | 0,66 |
+| CFD 2 (uniforme) | 0,086 | 104 | 0,0365 | 0,25 | 0,0073 | 0,0003 | 14,6 | 0,80 |
+| CFD 3 (parabólico) | 0,088 | 106 | 0,0369 | 0,25 | 0,0073 | 0,0013 | 3,8 | 0,75 |
+| **CFD 4 (parab. + lift)** | **0,086** | **103** | **0,0363** | **0,25** | **0,0073** | **0,0042** | **1,2** | **0,70** |
+
+Com Da = 1,8, os limites são X_CSTR = 0,64 e X_PFR = 0,84.
+
+**Leitura:**
+
+- **Taxa global** (`1/k_ef = 1/kLa + 1/(k1 εL)`). O CFD dá kLa 2–3× maior que as correlações, porque tem εG maior e kL de Higbie. No exemplo (k1εL/kLa ≈ 0,25–0,7, regime misto), a taxa global muda +30 %. Para reações mais rápidas (k1 ≳ 0,1 1/s, ainda com Ha < 0,3), a taxa fica **controlada pela TM** e a diferença chega a 2–3×, ou seja, um volume de reator 2–3× diferente. Para reações lentas (k1 ≲ 10⁻³), a hidrodinâmica não importa. Isso define *quando* o CFD é necessário.
+- **Conversão.** D_L estimado a partir da circulação do CFD (D_L ≈ 0,31·V_c·D, Joshi 1980) leva X de 0,66 (D_L de Deckwer, quase CSTR) para 0,70–0,80 conforme a circulação. A circulação que o CFD resolve é o que posiciona o reator entre CSTR e PFR.
+- **Ressalvas.** (i) kL de Higbie vale para interface móvel; em água contaminada o kL real é menor, então o kLa do CFD é um limite superior. (ii) O 2D axissimétrico subestima a circulação (seção 4), e portanto subestima D_L e superestima X. O valor "verdadeiro" deve ficar entre o CFD 4 e as correlações. (iii) A constante de Joshi (0,31) precisa ser conferida no original.
+
+## 6. Pendências / próximos passos
 
 - [ ] Pontos de U_G = 1 e 4 cm/s (α na entrada = 0,05 e 0,20) para a curva εG × U_G
 - [ ] Caso 3D (malha de 7,5 mm) para o vídeo da pluma e a circulação real
