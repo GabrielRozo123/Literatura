@@ -2,7 +2,7 @@
 
 **Base:** tutorial *"Eulerian: Hibiki's Bubble Column"* (Simcenter STAR-CCM+ 2602 / 21.02.007). Física, fases, interação, contorno, condições iniciais, solver e S-Gamma foram **conferidos com as 10 páginas do tutorial**. O que muda em relação a ele está marcado com 🔁.
 
-> **Ordem de trabalho recomendada:** monte primeiro o **2D axissimétrico** (passos 1 a 10, roda em minutos) para depurar o setup. Depois repita com o **3D** (o mesmo .sim, trocando geometria, malha e Space) para a apresentação.
+> **Ordem de trabalho recomendada:** monte primeiro o **2D axissimétrico** (passos 1 a 10, roda em minutos) para depurar o setup. Depois repita com o **3D** numa simulação nova (seção 16) para a apresentação.
 
 ## 0. Resumo do caso
 
@@ -346,3 +346,64 @@ Equação de projeto (Python) ──►  kLa (Higbie: kL·a), Ha, conversão X
 3. **Validação.** Existem muitos dados de εG × U_G; dados simples de coluna com reação são raros.
 
 **Quando valeria ativar** (fora do escopo da demo): reação rápida (Ha > 3, no filme), exotérmica (pontos quentes), seletividade sensível à retromistura, ou consumo forte de gás. O caminho no STAR seria: Water como *Multi-Component Liquid* (H2O + O2), *Interphase Mass Transfer* com kL de Higbie/Ranz–Marshall e uma fonte −k1·C via *User Source*.
+
+## 16. Caso 3D (a rodada que corrige o 2D)
+
+**Objetivo:** repetir a **rodada 4** (aspersor parabólico, lift −0,05, d = 5 mm) em 3D. No 2D axissimétrico a circulação ficou ~3× abaixo de Riquarts e εG (0,086) ficou acima do experimento de aspersor grosseiro (Besagni: 0,069). Em 3D, a pluma pode oscilar e a circulação deve ficar mais forte. A expectativa (não garantida) é εG cair em direção a 0,07–0,08 e V_L no eixo subir para 0,15–0,25 m/s. Além disso, o 3D gera o vídeo para a plateia.
+
+**Use uma simulação nova** (`File → New Simulation`, salve como `cinetica_3D.sim`). Mudar o continuum de Axisymmetric para 3D numa mesma .sim é arriscado. Os passos são os mesmos das seções 2 a 11; abaixo estão **só as diferenças**.
+
+| Passo | 2D (feito) | **3D** |
+|-------|------------|--------|
+| Geometria | `coluna_2D_axi_R75_H1200.step` | **`coluna_3D_D150_H1200.step`** (eixo Z, fundo em z = 0; faces `Aspersor`, `Topo`, `Parede`). Não existe fronteira `Eixo` |
+| Malha | Automated Mesh (2D), 2,5 mm | **Automated Mesh: Surface Remesher + Trimmed Cell Mesher, Base Size = 7,5 mm, sem Prism Layer** (≈ 50 mil células). Célula ≥ diâmetro da bolha, como pede o Euler–Euler |
+| Space | Axisymmetric | **Three Dimensional** |
+| Demais modelos | Implicit Unsteady, Multiphase, EMP, Turbulent, **Mixture Turbulence**, Gravity | iguais |
+| Fases / interação | Água 997 / 8,9e-4; Ar 1,18 / 1,8e-5; Tomiyama; **d = 0,005 m**; **σ = 0,072**; VM; TD; **Lift = −0,05** | **iguais** (confira d e σ, que vêm com padrão errado) |
+| Gravity | [−9,81, 0] | **[0, 0, −9,81]** |
+| Reference Density | 1,18 | 1,18 |
+
+**Field Functions 3D** (a altura agora é Z = `[2]` e o raio é √(x² + y²)):
+
+```
+FF_alphaAgua  :  ($${Centroid}[2] <= 0.9) ? 1 : 0
+FF_alphaAr    :  1 - ${FF_alphaAgua}
+FF_pHidro     :  ($${Centroid}[2] <= 0.9) ? (997 - 1.18)*9.81*(0.9 - $${Centroid}[2]) : 0
+FF_inAr       :  0.2*(1 - (pow($${Centroid}[0],2) + pow($${Centroid}[1],2))/pow(0.075,2))
+FF_inAgua     :  1 - ${FF_inAr}
+```
+
+**Aspersor** (Velocity Inlet): Ar com Volume Fraction = `FF_inAr` e Velocity Magnitude = 0,2 m/s; Água com Volume Fraction = `FF_inAgua` e velocidade 0. A média de `FF_inAr` ponderada pela área é 0,1, então U_G = 2 cm/s. **Topo**: Pressure Outlet, backflow de ar = 1. **Parede**: Wall.
+
+**Solver:** Δt = 0,001 s até 1 s, 0,0025 s até 3 s, depois 0,005 s. Inner iterations = 15–20. **Maximum Physical Time = 60 s.** O 3D oscila mais e precisa de média longa.
+
+**Médias:**
+
+- Field Mean com Start = 1000 + 800 + (15 − 3)/0,005 = **4200** (média a partir de t = 15 s).
+- Line probes em z = 0,6 m, com 60 pontos cada:
+
+| Probe | Point 0 | Point 1 |
+|-------|---------|---------|
+| `Radial_x` | [−0,0745, 0, 0,6] | [0,0745, 0, 0,6] |
+| `Radial_y` | [0, −0,0745, 0,6] | [0, 0,0745, 0,6] |
+
+Os dois diâmetros dão uma ideia da simetria da média. O `perfis_radiais.py` aceita perfis de −R a +R (usa |r|).
+
+**Cenas para a plateia** (a parte que o 2D não tinha):
+
+1. `Derived Parts → Section → Plane`: plano **XZ** (normal [0, 1, 0], origem [0, 0, 0]). Opcional: plano **YZ**.
+2. Scalar Scene no plano: Volume Fraction (Ar), escala fixa de 0 a 0,2.
+3. Vector Displayer no plano: Velocity (Água), **Projection Mode = Tangential**, LIC. Fica bom com escalar de V_z da água por baixo (−0,3 a 0,3).
+4. Isosurface Volume Fraction (Água) = 0,5, para a superfície livre.
+5. Opcional, cena "3D": Outline da coluna em transparência + isosuperfície de Volume Fraction (Ar) = 0,12 (a pluma).
+6. Hardcopy a cada 20 passos (0,1 s), a partir de t = 3 s, em 1000 × 1600.
+
+**Antes da rodada longa, faça um teste de custo.** Rode 20 passos com Δt = 0,005 s e anote o tempo por passo no Output. Multiplique por ~12 000 passos (60 s). Se passar de uma noite, use Base Size = 10 mm (≈ 25 mil células) ou rode até 45 s.
+
+**O que comparar no fim** (`compara_cfd_literatura.py` e `perfis_radiais.py`):
+
+| Grandeza | 2D (rodada 4) | 3D | Referência |
+|----------|---------------|----|------------|
+| εG | 0,086 | ? | Besagni (spider) 0,069; Mudde (agulhas) 0,089 |
+| V_L no eixo | 0,06 m/s | ? | Riquarts 0,25 m/s |
+| Inversão do V_L | r/R = 0,70 | ? | ≈ 0,7 |
