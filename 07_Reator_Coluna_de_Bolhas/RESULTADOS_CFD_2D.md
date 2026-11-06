@@ -101,7 +101,7 @@ Com Da = 1,8, os limites são X_CSTR = 0,64 e X_PFR = 0,84.
 - [x] Dados experimentais recentes em `dados_experimentais.csv` (Mudde 2009 / Draw & Rzehak 2024; Besagni & Inzoli 2016)
 - [ ] (Opcional) S-Gamma para a distribuição de tamanho de bolhas
 
-> Observação sobre os perfis: a vazão líquida líquida na seção da rodada 4 dá +13 % da vazão ascendente (o ideal seria ≈ 0). Isso indica que a média de 18 s (~2 voltas de circulação) ainda carrega incerteza estatística nos perfis locais. O εG global não é afetado.
+> Observação sobre os perfis: a vazão líquida na seção da rodada 4 dá +13 % da vazão ascendente (o ideal seria ≈ 0). Isso indica que a média de 18 s (~2 voltas de circulação) ainda carrega incerteza estatística nos perfis locais. O εG global não é afetado.
 
 ---
 
@@ -124,6 +124,6 @@ Figura: `Programacao/coluna_bolhas/resultados/fig_2D_vs_3D.png`, script `figura_
 1. **O 3D confirmou o 2D:** εG mudou só 4 % (0,086 → 0,089) e a circulação ficou praticamente igual. O 2D axissimétrico **não** era o responsável pela circulação fraca.
 2. **A coluna ficou quase estacionária também em 3D** (σ do holdup = 0,0001). Não apareceu uma pluma serpenteando. Com bolhas de 5 mm, aspersor distribuído e k-ε (RANS), o escoamento fica no regime homogêneo, sem estruturas de grande escala. A literatura atribui a dinâmica forte a bolhas maiores que ~5,8 mm (lift negativo, Lucas et al. 2005; Draw & Rzehak 2024, Tab. 6) e/ou a modelos de turbulência menos dissipativos (LES).
 3. **Validação:** εG em 3D coincide com o experimento de aspersor uniforme (**Mudde: 0,089, desvio < 1 %**). O modelo representa bem uma coluna homogênea com aspersor fino, e não a coluna com aspersor grosseiro de Besagni (0,069). Para esta seriam necessários a geometria do *spider* e a distribuição de tamanhos de bolha (S-Gamma ou duas classes).
-4. **Estatística:** a média de 15 a 28,8 s (~1,5 volta de circulação) ainda mostra assimetria entre os 4 raios (faixa sombreada) e uma vazão líquida líquida diferente de zero na sonda. **Os perfis locais são indicativos.** O εG global é robusto.
+4. **Estatística:** a média de 15 a 28,8 s (~1,5 volta de circulação) ainda mostra assimetria entre os 4 raios (faixa sombreada) e uma vazão líquida diferente de zero na sonda. **Os perfis locais são indicativos.** O εG global é robusto.
 
 **Mensagem para a apresentação:** *"Em 2D ou em 3D, o modelo reproduz a coluna homogênea com aspersor uniforme (−3 % e < 1 %). A diferença em relação às correlações clássicas vem do aspersor e do tamanho das bolhas, não da dimensionalidade do modelo."* Isso leva a três próximos passos: S-Gamma (tamanho de bolha calculado), geometria real do aspersor e LES para a dinâmica da pluma.
