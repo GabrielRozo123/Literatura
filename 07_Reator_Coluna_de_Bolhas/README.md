@@ -7,6 +7,7 @@
 | Equações de projeto + exemplo numérico | `Programacao/coluna_bolhas/projeto_coluna_bolhas.py` |
 | Passo a passo do caso no STAR-CCM+ | [`SETUP_StarCCM.md`](SETUP_StarCCM.md) |
 | Pós-processamento CFD × literatura | `Programacao/coluna_bolhas/compara_cfd_literatura.py` |
+| **Resultados das rodadas CFD 2D** | [`RESULTADOS_CFD_2D.md`](RESULTADOS_CFD_2D.md) |
 | Dados experimentais (a preencher) | `Programacao/coluna_bolhas/dados_experimentais.csv` |
 
 ---
