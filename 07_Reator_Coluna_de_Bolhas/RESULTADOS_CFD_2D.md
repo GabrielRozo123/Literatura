@@ -127,3 +127,29 @@ Figura: `Programacao/coluna_bolhas/resultados/fig_2D_vs_3D.png`, script `figura_
 4. **Estatística:** a média de 15 a 28,8 s (~1,5 volta de circulação) ainda mostra assimetria entre os 4 raios (faixa sombreada) e uma vazão líquida diferente de zero na sonda. **Os perfis locais são indicativos.** O εG global é robusto.
 
 **Mensagem para a apresentação:** *"Em 2D ou em 3D, o modelo reproduz a coluna homogênea com aspersor uniforme (−3 % e < 1 %). A diferença em relação às correlações clássicas vem do aspersor e do tamanho das bolhas, não da dimensionalidade do modelo."* Isso leva a três próximos passos: S-Gamma (tamanho de bolha calculado), geometria real do aspersor e LES para a dinâmica da pluma.
+
+---
+
+## 8. Validação sistemática: Mudde et al. (2009), casos M1–M5
+
+Figura: `Programacao/coluna_bolhas/resultados/fig_validacao_mudde.png` (script `figura_validacao_mudde.py`). Dados em `resultados_validacao_Mudde/`.
+
+**Setup:** 2D axissimétrico, aspersor **uniforme** (α_ar = J_G/0,2 a 0,2 m/s, como em Draw & Rzehak 2024), d = 5 mm, sem lift, Mixture k-ε. Coluna D = 0,15 m (igual à do experimento) com H0 = 0,9 m. O experimento usou 1,3 m, mas H/D > 5 nos dois, então εG independe da altura. εG = média dos últimos 1,5 s.
+
+| Caso | J_G [m/s] | εG CFD | εG exp. (Mudde) | Desvio | Observação |
+|------|-----------|--------|-----------------|--------|------------|
+| M1 | 0,015 | 0,064 | 0,061 | **+4 %** | estável (t = 6,5 s) |
+| M2 | 0,017 | (0,068) | 0,076 | (−10 %) | **não estabilizado**: parou em 5 s, ainda subindo; rodar de novo até ~12 s |
+| rodada 2 | 0,020 | 0,0865 | 0,089 (interp.) | **−3 %** | estável |
+| M3 | 0,025 | 0,108 | 0,110 | **−2 %** | estável |
+| M4 | 0,032 | 0,138 | 0,160 | −14 % | estável |
+| M5 | 0,039 | 0,169 | 0,200 | −15 % | estável |
+
+**Leitura:**
+
+1. **Até εG ≈ 0,11 (J_G ≤ 2,5 cm/s) o CFD concorda com o experimento em ±5 %.** É o nível de concordância reportado por Draw & Rzehak (2024) com o modelo *baseline* do HZDR.
+2. **Acima de εG ≈ 0,15 o CFD subestima em ~15 %.** O painel (c) mostra o motivo: no CFD a velocidade relativa da bolha fica constante, w_rel/w0 ≈ 1,0, o comportamento de "bolhas pseudo-isoladas" (Draw & Rzehak, Eq. 7). No experimento, w_rel/w0 cai para ~0,84 em εG = 0,2: num **enxame**, as bolhas sobem mais devagar (efeito do gradiente de pressão da mistura, √(1−εG), mais o efeito de enxame propriamente dito). Bolhas mais lentas significam mais gás retido.
+3. **Correção recomendada (próximo passo):** um *swarm corrector* no arrasto, C_D,α/C_D,0 = (1−αG)(w_rel/w0)⁻². Por exemplo Roghair et al. (2011) com parâmetros ajustados, ou Richardson & Zaki, que Draw & Rzehak recomendam acima de εG ≈ 0,2. No STAR, verificar se o nó *Drag Force* oferece correção por fração volumétrica (*drag correction*/*swarm*).
+4. **Por que o CFD não captura nem o fator √(1−εG)** que o modelo de Draw & Rzehak captura naturalmente: **não identificado**. Hipóteses a verificar: formulação do arrasto de Tomiyama no STAR, uma correção de arrasto padrão, ou o tratamento da força de empuxo com a densidade de referência.
+
+**Mensagem para a apresentação:** *"Validado contra experimento recente na mesma geometria: erro ≤ 5 % no regime homogêneo diluído (εG ≤ 0,11). Para εG ≥ 0,15 o modelo precisa de correção de enxame, exatamente a limitação apontada na literatura recente (Draw & Rzehak, 2024)."*
