@@ -236,8 +236,44 @@ Hidrodinâmica de quatro fontes:
 
 > **Ressalvas:** k_L de Higbie supõe interface móvel; em sistemas contaminados ou com eletrólitos, k_L é menor e a coalescência é inibida (bolhas menores). O valor de k_OH depende da força iônica e da temperatura. D_L de Joshi foi usado com a constante 0,31, que precisa ser conferida no original.
 
+## 5b. Estudo de caso: CO₂ puro em NaOH, semibatelada (o regime muda no tempo)
+
+`python caso_co2_naoh.py` → `resultados/caso_co2_naoh.{json,csv}` e `fig_caso_co2_naoh.png`.
+
+Sistema-referência da literatura recente de colunas reativas: experimento de Darmana et al. (2007); modelos de E de Krauß & Rzehak (2017); Euler–Euler reativo de Krauß & Rzehak (2018) e Liu et al. (2021); modelo de projeto de Michelson et al. (2023). Aqui a mesma química é aplicada à nossa coluna.
+
+**Condições.** CO₂ puro a 1 atm (C* = 34 mol/m³) em NaOH 31,6 mol/m³ (pH 12,5); D = 0,15 m, H₀ = 0,9 m, U_G = 2 cm/s; 25 °C.
+
+**Modelo** (quatro blocos acoplados, BDF):
+1. Hidrodinâmica: εG, d_b → a = 6εG/d_b; k_L de Higbie.
+2. Ha = √(k_OH[OH⁻]D_CO₂)/k_L; Ei = 1 + D_OH[OH⁻]/(2D_CO₂C*); E de van Krevelen–Hoftijzer, recalculados a cada instante.
+3. Gás pistonado com bolhas que encolhem (CO₂ puro): F(H) = F₀·exp(−λH_D), λ = N·a₀/F₀.
+4. Líquido bem misturado: balanços de CO₂ dissolvido e de carbono iônico. Rede: CO₂ + OH⁻ ⇌ HCO₃⁻ (Pohorecki & Moniuk, 1988); CO₂ + H₂O (k_w ≈ 0,03 s⁻¹); HCO₃⁻/CO₃²⁻ em equilíbrio. pH pelo balanço de cargas.
+
+| Hidrodinâmica | εG | a [m⁻¹] | k_La [s⁻¹] | Ha₀ | Ei₀ | E₀ | absorção inicial | t (pH 10) | t (pH 8,3) | Ha < 0,3 em |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Correlação (Akita & Yoshida) | 0,055 | 54 | 0,0205 | 1,84 | 2,28 | 1,56 | 72 % | 44 s | 66 s | 30 s |
+| CFD validado | 0,086 | 103 | 0,0347 | 2,07 | 2,28 | 1,63 | 90 % | 34 s | 50 s | 24 s |
+
+**Leitura.**
+- A hidrodinâmica do CFD reduz em ~24 % o tempo de batelada até pH 8,3.
+- O regime **muda durante a batelada**:
+  - no início é intermediário (Ha ≈ 2, E ≈ 1,6, limitado por Ei);
+  - quando o OH⁻ cai, Ha < 0,3 e o controle passa a ser por transferência de massa (E = 1, taxa = k_La·C*);
+  - depois que o carbonato vira bicarbonato, resta absorção física.
+- Portanto, o parâmetro hidrodinâmico que governa a taxa (a, depois k_La) também muda com o tempo.
+
+**Tabela de projeto por regime** (usada nos slides "Taxa de consumo" e "Equações de projeto"). Hipóteses: altura com A diluído e B em excesso; tempo de batelada com C* constante e líquido bem misturado; β = b·D_A·C*/D_B.
+
+| Regime | −r_A | Altura (gás pistonado) | Tempo de batelada para consumir B |
+|---|---|---|---|
+| Lento, cinético (k₁ε_L ≪ k_La) | k₁ε_L C* | He U_G ln[1/(1−X)]/(k₁ε_L) | ln(C_B0/C_B)/(b k₂ C*) |
+| Lento, TM (Ha < 0,3; k₁ε_L ≫ k_La) | k_La C* | He U_G ln[1/(1−X)]/(k_La) | ε_L(C_B0 − C_B)/(b k_La C*) |
+| Rápido (3 < Ha ≪ Ei) | a C* √(k₂C_B D_A) | He U_G ln[1/(1−X)]/(a√(k₂C_B D_A)) | 2ε_L(√C_B0 − √C_B)/(b a C* √(k₂D_A)) |
+| Instantâneo (Ha ≫ Ei) | k_La C* Ei | He U_G ln[1/(1−X)]/(k_La Ei) | (ε_L D_A/(k_La D_B)) ln[(C_B0+β)/(C_B+β)] |
+
 ---
 
 ## 6. Referências desta seção
 
-Levenspiel (1999), cap. 23–24 · Danckwerts (1970), *Gas–Liquid Reactions* · van Krevelen & Hoftijzer (1948) · Deckwer (1992), *Bubble Column Reactors* · Shah et al. (1982) · Pohorecki & Moniuk (1988) · Joshi (1980) · Akita & Yoshida (1973, 1974) · Besagni & Inzoli (2016) · Draw & Rzehak (2024) / Mudde et al. (2009). Entradas em `references.bib`; campos `TBD` ainda a conferir.
+Levenspiel (1999), cap. 23–24 · Danckwerts (1970), *Gas–Liquid Reactions* · van Krevelen & Hoftijzer (1948) · Deckwer (1992), *Bubble Column Reactors* · Shah et al. (1982) · Pohorecki & Moniuk (1988) · Joshi (1980) · Akita & Yoshida (1973, 1974) · Besagni & Inzoli (2016) · Draw & Rzehak (2024) / Mudde et al. (2009) · Darmana et al. (2007) · Krauß & Rzehak (2017, 2018) · Liu et al. (2021) · Michelson et al. (2023). Entradas em `references.bib`; campos `TBD` ainda a conferir.
