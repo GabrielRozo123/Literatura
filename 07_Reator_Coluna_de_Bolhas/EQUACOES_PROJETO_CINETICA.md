@@ -240,7 +240,7 @@ Hidrodinâmica de quatro fontes:
 
 `python caso_co2_naoh.py` → `resultados/caso_co2_naoh.{json,csv}` e `fig_caso_co2_naoh.png`.
 
-Sistema-referência da literatura recente de colunas reativas: experimento de Darmana et al. (2007); modelos de E de Krauß & Rzehak (2017); Euler–Euler reativo de Krauß & Rzehak (2018) e Liu et al. (2021); modelo de projeto de Michelson et al. (2023) · Hikita & Asai (1964). Aqui a mesma química é aplicada à nossa coluna.
+Sistema-referência da literatura recente de colunas reativas: experimento de Darmana et al. (2007); modelos de E de Krauß & Rzehak (2017); Euler–Euler reativo de Krauß & Rzehak (2018) e Liu et al. (2021); modelo de projeto de Michelson et al. (2023). Aqui a mesma química é aplicada à nossa coluna.
 
 **Condições.** CO₂ puro a 1 atm (C* = 34 mol/m³) em NaOH 31,6 mol/m³ (pH 12,5); D = 0,15 m, H₀ = 0,9 m, U_G = 2 cm/s; 25 °C.
 
@@ -334,4 +334,4 @@ O −r_A dentro da integral depende do regime:
 
 ## 6. Referências desta seção
 
-Levenspiel (1999), cap. 23–24 · Danckwerts (1970), *Gas–Liquid Reactions* · van Krevelen & Hoftijzer (1948) · Deckwer (1992), *Bubble Column Reactors* · Shah et al. (1982) · Pohorecki & Moniuk (1988) · Joshi (1980) · Akita & Yoshida (1973, 1974) · Besagni & Inzoli (2016) · Draw & Rzehak (2024) / Mudde et al. (2009) · Darmana et al. (2007) · Krauß & Rzehak (2017, 2018) · Liu et al. (2021) · Michelson et al. (2023). Entradas em `references.bib`; campos `TBD` ainda a conferir.
+Levenspiel (1999), cap. 23–24 · Danckwerts (1970), *Gas–Liquid Reactions* · van Krevelen & Hoftijzer (1948) · Deckwer (1992), *Bubble Column Reactors* · Shah et al. (1982) · Pohorecki & Moniuk (1988) · Joshi (1980) · Akita & Yoshida (1973, 1974) · Besagni & Inzoli (2016) · Draw & Rzehak (2024) / Mudde et al. (2009) · Darmana et al. (2007) · Krauß & Rzehak (2017, 2018) · Liu et al. (2021) · Michelson et al. (2023) · Hikita & Asai (1964). Entradas em `references.bib`; campos `TBD` ainda a conferir.
