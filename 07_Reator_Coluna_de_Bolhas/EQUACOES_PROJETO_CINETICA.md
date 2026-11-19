@@ -240,7 +240,7 @@ Hidrodinâmica de quatro fontes:
 
 `python caso_co2_naoh.py` → `resultados/caso_co2_naoh.{json,csv}` e `fig_caso_co2_naoh.png`.
 
-Sistema-referência da literatura recente de colunas reativas: experimento de Darmana et al. (2007); modelos de E de Krauß & Rzehak (2017); Euler–Euler reativo de Krauß & Rzehak (2018) e Liu et al. (2021); modelo de projeto de Michelson et al. (2023). Aqui a mesma química é aplicada à nossa coluna.
+Sistema-referência da literatura recente de colunas reativas: experimento de Darmana et al. (2007); modelos de E de Krauß & Rzehak (2017); Euler–Euler reativo de Krauß & Rzehak (2018) e Liu et al. (2021); modelo de projeto de Michelson et al. (2023) · Hikita & Asai (1964). Aqui a mesma química é aplicada à nossa coluna.
 
 **Condições.** CO₂ puro a 1 atm (C* = 34 mol/m³) em NaOH 31,6 mol/m³ (pH 12,5); D = 0,15 m, H₀ = 0,9 m, U_G = 2 cm/s; 25 °C.
 
@@ -270,7 +270,65 @@ Sistema-referência da literatura recente de colunas reativas: experimento de Da
 | Lento, cinético (k₁ε_L ≪ k_La) | k₁ε_L C* | He U_G ln[1/(1−X)]/(k₁ε_L) | ln(C_B0/C_B)/(b k₂ C*) |
 | Lento, TM (Ha < 0,3; k₁ε_L ≫ k_La) | k_La C* | He U_G ln[1/(1−X)]/(k_La) | ε_L(C_B0 − C_B)/(b k_La C*) |
 | Rápido (3 < Ha ≪ Ei) | a C* √(k₂C_B D_A) | He U_G ln[1/(1−X)]/(a√(k₂C_B D_A)) | 2ε_L(√C_B0 − √C_B)/(b a C* √(k₂D_A)) |
-| Instantâneo (Ha ≫ Ei) | k_La C* Ei | He U_G ln[1/(1−X)]/(k_La Ei) | (ε_L D_A/(k_La D_B)) ln[(C_B0+β)/(C_B+β)] |
+| Instantâneo (Ha ≫ Ei) | k_La (C* + D_B C_B/(b D_A)) | (He U_G/k_La) ln[(C_AG0+γ)/(C_AG0(1−X)+γ)], γ = He D_B C_B/(b D_A) | (ε_L D_A/(k_La D_B)) ln[(C_B0+β)/(C_B+β)] |
+
+> Correção (v3): no instantâneo a taxa k_La(C* + D_B C_B/(b D_A)) não é proporcional a C*, então a altura exata é a forma com γ. A forma antiga, He U_G ln[1/(1−X)]/(k_La Ei), só vale com Ei constante.
+
+## 5c. Generalização: estequiometria, ordem (m, n) e reação reversível
+
+`python projeto_generico.py` confere as formas fechadas contra a integral numérica (`scipy.quad`). O maior desvio é 7×10⁻⁹ para m = 0,5–2, n = 0–3 e os quatro regimes. O script também resolve um caso reversível pela integral.
+
+**Reação e o b.** ν_A A(g→l) + ν_B B(l) ⇌ ν_C C(l) + ν_D D(l).
+- Usamos ν para não confundir com a área interfacial a.
+- Na base de 1 mol de A absorvido: A + b B ⇌ c C + d D, com b = ν_B/ν_A, c = ν_C/ν_A, d = ν_D/ν_A.
+- b = mols de B consumidos por mol de A, logo −r_B = b(−r_A).
+- Exemplos: CO₂ + 2OH⁻ → CO₃²⁻ + H₂O (b = 2, o fator 2 do Ei no estudo de caso); CO₂ + OH⁻ → HCO₃⁻ (b = 1); O₂ + 2SO₃²⁻ → 2SO₄²⁻ (b = 2).
+
+**Lei de velocidade (por volume de líquido).** r = k C_A^m C_B^n − k' C_C^p C_D^q.
+- Irreversível: k' = 0. Elementar: k/k' = K_c.
+
+**Estequiometria do líquido em batelada.** C_B = C_B0(1−X_B), C_C = C_C0 + (c/b)C_B0 X_B, C_D = C_D0 + (d/b)C_B0 X_B.
+
+**Equações de projeto gerais** (−r_A por volume de reator; valem para qualquer cinética):
+
+| Caso | Equação |
+|---|---|
+| Líquido em batelada (C* constante) | t = (ε_L C_B0/b) ∫₀^{X_B} dX_B/(−r_A) |
+| Gás pistonado (A diluído, U_G ≈ cte) | H = U_G C_AG0 ∫₀^{X_A} dX_A/(−r_A), com C* = C_AG0(1−X_A)/He; V_R = A_T H |
+| Líquido contínuo (CSTR) | V_R = Q_L C_B0 X_B / [b (−r_A)_saída] |
+
+O −r_A dentro da integral depende do regime:
+- **lento, cinético:** −r_A = ε_L[k C*^m C_B^n − k' C_C^p C_D^q];
+- **caso geral, com filme:** −r_A = k_L a E (C* − C_A,e).
+
+**Reversível.**
+- A integral diverge na conversão de equilíbrio X_Be, onde −r_A = 0.
+- Exemplo A + B ⇌ C no regime cinético, com κ = K_c C* e τ = b k C* t: X_B → κ/(1+κ). A integral numérica dá X_B(τ = 4) = 0,795 para κ = 4 e 0,500 para κ = 1.
+- No regime com filme, E depende também de K (Danckwerts, 1970), e a linearização de Hikita–Asai não vale em geral para reações reversíveis.
+
+**Formas fechadas (irreversível, ordem m em A e n em B).** Use ln[1/(1−X)] quando o expoente vale 1.
+
+| Regime | −r_A | t(X_B) | H(X_A) |
+|---|---|---|---|
+| Lento, cinético | ε_L k C*^m C_B^n | [(1−X_B)^{1−n} − 1] / [(n−1) b k C*^m C_B0^{n−1}] | U_G He^m C_AG0^{1−m} [(1−X_A)^{1−m} − 1] / [(m−1) ε_L k C_B^n] |
+| Lento, TM | k_La C* | ε_L C_B0 X_B / (b k_La C*) | (He U_G/k_La) ln[1/(1−X_A)] |
+| Rápido (Hikita & Asai, 1964) | a √[2/(m+1)·k D_A C*^{m+1} C_B^n] | ε_L C_B0^{1−n/2} [1 − (1−X_B)^{1−n/2}] / [(1−n/2) b a √(2/(m+1)·k D_A C*^{m+1})] | U_G He^p C_AG0^{1−p} [(1−X_A)^{1−p} − 1] / [(p−1) a √(2/(m+1)·k D_A C_B^n)], p = (m+1)/2 |
+| Instantâneo | k_La (C* + D_B C_B/(b D_A)) | (ε_L D_A/(k_La D_B)) ln[(C_B0+β)/(C_B0(1−X_B)+β)], β = b D_A C*/D_B | (He U_G/k_La) ln[(C_AG0+γ)/(C_AG0(1−X_A)+γ)] |
+
+**Conversão explícita** (invertendo as expressões acima):
+- cinético, n ≠ 1: X_B = 1 − [1 + (n−1) b k C*^m C_B0^{n−1} t]^{1/(1−n)};
+- cinético, n = 1: X_B = 1 − exp(−b k C*^m t);
+- controle por TM: X_B = b k_La C* t/(ε_L C_B0), linear até X_B = 1;
+- gás pistonado com m = 1: X_A = 1 − exp(−ε_L k C_B^n H/(He U_G)).
+
+**Ordem aparente** (por que a cinética "falsificada" engana):
+
+| Regime | ordem em A | ordem em B | E_a aparente |
+|---|---|---|---|
+| Lento, cinético | m | n | E_a |
+| Lento, TM | 1 | 0 | baixa (difusão) |
+| Rápido | (m+1)/2 | n/2 | ≈ (E_a + E_D)/2 |
+| Instantâneo | 0 a 1 | 0 a 1 | baixa (difusão) |
 
 ---
 
