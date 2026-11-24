@@ -72,3 +72,22 @@ Este arquivo registra o que cada página da documentação oferece ao nosso caso
 | R2: HCO₃⁻ + OH⁻ ⇌ CO₃²⁻ + H₂O | ~6×10⁹ L/(mol·s) (ordem de grandeza; conferir) | 4,68×10³ L/mol | 1,28×10⁶ s⁻¹, ou seja, **A_rev = 2,3×10⁷ cm³/(mol·s)** se a reversa incluir [H₂O] = 55,5 M (ou RORD H₂O 0) | 5×10⁻⁹ s (equilíbrio instantâneo) |
 
 As unidades Chemkin são mol, cm³ e s. A R2 é ~10⁶ vezes mais rápida que a R1, então o sistema é rígido e o CVODE é obrigatório. Íons como pseudo-espécies neutras (OHM, HCO3M, CO3MM, NAP): as reações ficam balanceadas em elementos sem o elétron, pois a carga se conserva em cada reação.
+
+## Lote 6: transferência de massa entre fases no EMP
+
+| Página | O que traz | Uso no nosso caso |
+|---|---|---|
+| Modeling Bubbly and Droplet Flows | Na fase: Material **Multi-Component Liquid/Gas** ("para reações, cada fase multicomponente"); *Reaction Regime* = **Reacting**, com Reacting Species Models; **para reação intrafase, Energy = Segregated Fluid Enthalpy é obrigatório em cada fase que reage**. Opcionais: S-Gamma, AMUSIG (distribuição de tamanhos). **Tipos de transferência de massa:** Boiling, **Dissolution**, Droplet Evaporation, **Interphase Reaction** (as duas fases multicomponentes) e **User-Defined Interphase Mass Flux** (com *Interphase Mass Transfer*; supõe efeito desprezível nas temperaturas). | **O User-Defined Interphase Mass Flux é a rota preferida**: o fluxo k_L·E·(C_G/He − C_L) entra por field function, com E calculado localmente a partir do pH. Falta a página dele. A energia (Segregated Fluid Enthalpy) é exigida na fase líquida reativa; o caso continua praticamente isotérmico (ΔT < 1 K a [NaOH] = 0,03 M). |
+| Modeling a Multi-Component Mixture | Componentes vêm do banco de materiais (Standard), com propriedades constantes por padrão. É possível criar pastas de mistura e substituir ou reordenar componentes. | Os íons não estão no banco padrão: serão criados pelo **import do mecanismo** (Complex Chemistry) ou como materiais de usuário (cópia de H₂O renomeada, com a massa molar certa). |
+| Modeling Dissolution Mass Transfer | Interação: *Interphase Mass Transfer* > **Dissolution** (Eq. 2108). Escolher os componentes transferidos (*Phase 0 Components*); Sherwood das fases contínua e dispersa; coeficiente de equilíbrio por componente. Com modelos de energia, as fontes de energia de cada fase devem ser dadas por field function. | Rota **mais simples** e sem field functions de fluxo, mas com limitações (abaixo). |
+| Sherwood Number Properties | Métodos: **Ranz–Marshall** (Eq. 2008) e **Armenante–Kirwan** (Eq. 2368; turbulento; expoentes e **fator de calibração** ajustáveis). | ⚠️ Ranz–Marshall vale para **esfera rígida** e subestima o k_L de bolhas limpas (Higbie) por um fator de ~3–4. O fator de calibração de Armenante–Kirwan permite embutir um **E constante**, mas não um E variável com o pH. |
+| Equilibrium Coefficient Properties | Gás–líquido: razão de **frações molares** (Eq. 2104); **Henry's Law** (Eq. 2106) ou Raoult. Para líquido–líquido: constante ou field function. | Henry do CO₂: converter kH = 0,034 mol/(L·atm) para a forma em fração molar da Eq. 2106 (falta a página da teoria). |
+
+### Decisão provisória de rota
+
+1. **Hidrodinâmica:** EMP + Mixture k-ε + Tomiyama + lift + VM + TD; topo *degassing*; S-Gamma opcional.
+2. **Química no líquido (intrafase):** Multi-Component Liquid + Reacting + Complex Chemistry + LFC + Segregated Fluid Enthalpy; mecanismo Chemkin com R1 e R2 reversíveis (REV); **Clustering desligado**.
+3. **Absorção:** **User-Defined Interphase Mass Flux**, com fluxo = M_CO₂·k_L·E·(C_G/He − C_L). Plano B: Dissolution com Armenante–Kirwan e E constante no fator de calibração.
+4. **E local em field function, pela fórmula explícita de DeCoursey (1974):** E = −Ha²/[2(Ei−1)] + √{Ha⁴/[4(Ei−1)²] + Ei·Ha²/(Ei−1) + 1}, com Ha = √(k₁[OH⁻]D_CO₂)/k_L e Ei = 1 + D_OH[OH⁻]/(2D_CO₂C*). **Conferida contra van Krevelen–Hoftijzer** (`cinetica_projeto.fator_aumento`): diferença de 1–5 % entre Ha = 0,3 e 10 e Ei = 1,2 e 50. É a mesma família de modelos comparada por Krauß & Rzehak (2017).
+
+**Páginas que faltam:** *User-Defined Interphase Mass Flux* (unidades, como se escolhe a espécie, se a área a entra automaticamente); *Modeling Interphase Reactions*; teoria das Eqs. 2104, 2106 e 2108 (Henry e taxa de dissolução).
