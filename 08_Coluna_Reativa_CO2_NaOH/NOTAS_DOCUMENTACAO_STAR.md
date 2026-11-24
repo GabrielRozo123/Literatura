@@ -27,3 +27,13 @@ Este arquivo registra o que cada página da documentação oferece ao nosso caso
 | Hibiki: Setting up the Phase Interactions | Desativar *Auto-select*; Continuous-Dispersed; Drag (Tomiyama); **Lift constante = −0,05**; Virtual Mass; Turbulent Dispersion; Interaction Length Scale constante de 3 mm. | Mesmo conjunto. Na coluna anterior usamos lift de Tomiyama; para d ≈ 3–5 mm com CO₂ puro, testar as duas opções. |
 
 **Ainda falta, nos lotes 1–2:** multicomponente na fase líquida, transferência de massa entre fases, reação e a teoria do S-Gamma com transferência de massa.
+
+## Lote 3: tutorial Hibiki, parte 2 (S-Gamma) e execução
+
+| Página | O que traz | Uso no nosso caso |
+|---|---|---|
+| Setting Boundary Conditions (Hibiki) | Inlet com mistura (água 1,23 m/s, α = 0,8; ar 1,61 m/s, α = 0,2); turbulência por *Intensity + Length Scale* (5 mm); outlet padrão; eixo como *Axis*. | Nosso líquido não escoa (batelada): só o gás entra pelo aspersor. |
+| Running the Simulation | Sub-relaxação: Phase Coupled Velocity 0,4; Pressure 0,5; Volume Fraction 0,3; k-ε 0,8. 2000 iterações em regime permanente; export de line probes em CSV. | Mesmos valores **na inicialização em regime permanente da hidrodinâmica**, antes de ligar o transiente reativo. |
+| Specifying the Particle Size Distribution | Na fase gás: *Particle Size Distribution > S-Gamma > Discrete Quadrature S-Gamma*, **Two Equation** (momentos S0 e S2: densidade numérica e área interfacial). Condição inicial de d32 (3 mm). | **Candidato para o diâmetro variável das bolhas de CO₂.** Ainda falta confirmar se a transferência de massa entre fases entra como fonte nos momentos (encolhimento por dissolução). |
+| Modifying the Phase Interaction | Ativar S-Gamma Breakup (Cg = 5,0; We_crit = 0,23) e S-Gamma Coalescence (Cg = 0,1). *Interaction Length Scale* passa para **Sauter Mean Diameter**. d32 imposto no inlet. σ = 0,072 N/m. | Igual. d32 no aspersor vem do experimento. |
+| Validating the S-Gamma Model | **Área interfacial a = π·S₂**: field function `$SecondSizeDistributionMomentAir*3.14` (dimensão comprimento⁻¹). d32 de 1,9 a 6,2 mm, boa concordância com o experimento; a fração de vazio fica subestimada perto da parede. | **Essa é a área a do nosso k_L·a·E.** Com S-Gamma: `a = π·$SecondSizeDistributionMomentCO2`. Sem S-Gamma: `a = 6·α_G/d`. Nome interno a conferir na tabela *Reference* da field function. |
