@@ -281,3 +281,21 @@ Y_CO2_entrada = ($Time >= 20) ? 1 : 0
 | E máximo no sensor | — | K&R ≈ 1,5; pontual 1,51 | — |
 
 Ao chegar a cada etapa, mande os CSV, como fizemos com a coluna anterior.
+
+---
+
+## 11. Etapa F: LES (planejamento)
+
+Motivação: K&R concluem que o atraso de ~20 % no pH vem da **hidrodinâmica RANS**: a frequência da pluma sai baixa (0,14 Hz contra 0,17 Hz) e o tempo de residência das bolhas sai curto. A LES Euler–Lagrange de Darmana acerta a frequência. A pergunta da etapa F é **quanto do pH melhora só trocando RANS por LES**, com a mesma química.
+
+| Item | Ajuste |
+|---|---|
+| Modelo | Turbulent > **Large Eddy Simulation > WALE Subgrid Scale**, All y+ (desligar o Auto-select). Verificar se o EMP aceita com Mixture Turbulence |
+| Malha | **base = 5 mm (a mesma do RANS)** e uma variante de 4 mm. Critério Euler–Euler: Δ ≳ d_b (Milelli). Não usar 2,5 mm (menor que a bolha) |
+| Verificação | No RANS da etapa A, plotar *Taylor Micro Scale* e *Kolmogorov Length Scale* no plano z = 0. No LES, k_res/k_sgs > 5, com k_res das Field Variances de u, v, w e k_sgs de *SGS Turbulent Kinetic Energy* |
+| Convecção | **Bounded-Central** no momento (fator de upwind padrão); fração volumétrica como no RANS |
+| Tempo | 2ª ordem; **Δt = 2–2,5 ms** (CFL ≈ 0,5–1 com u ~ 0,5 m/s); ≤ 15 iterações internas |
+| Início | do **.sim RANS em t = 20 s** (troca de modelo no mesmo arquivo); descartar ~15 s (≈ 2 passagens da pluma) |
+| Estatística | Field Mean de α_G e u_G; **Field Variance** de u, v, w (Reynolds normais); 60 s de amostragem para N₂ |
+| Comparação | f_pluma, α_G, perfis em y = 750 mm (RANS × LES × experimento). Depois, com CO₂: pH(t) e d32(z) |
+| Custo | ~3–5× o RANS na mesma malha (passo menor e central) |

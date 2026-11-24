@@ -147,3 +147,14 @@ As unidades Chemkin são mol, cm³ e s. A R2 é ~10⁶ vezes mais rápida que a 
 3. **Plano B** (se o Ṁ da Interphase Reaction não entrar no S-Gamma): fonte de usuário em S₂ via field function, s_u = Ṡ₂ da Eq. 2142 com Ṁ calculado pelas nossas field functions, e s_diss correspondente em S₀; ou diâmetro constante por trechos.
 
 **Conclusão: a documentação do STAR necessária está completa.** Faltam só os artigos (Krauß & Rzehak 2018; Darmana et al. 2007).
+
+## Lote 10: LES no STAR-CCM+ 2602
+
+| Página | O que traz | Uso no nosso caso |
+|---|---|---|
+| Large Eddy Simulation (LES) | Filtragem espacial; tensões de submalha por Boussinesq com ν_sgs; médias por estatística no tempo (Field Mean/Variance); Synthetic Eddy Method para entradas turbulentas. | Nossa entrada é injeção de gás, sem turbulência de entrada: o SEM não é necessário. |
+| Subgrid Scale Turbulence Models | Smagorinsky (C_s não universal, precisa de amortecimento de Van Driest), Dynamic Smagorinsky e **WALE** (pouco sensível à constante, sem amortecimento, recomendado). | **WALE**. Darmana usou Vreman, que é da mesma família. |
+| Selecting LES… / Reference | Requer 3D, Implicit Unsteady, **Material: Multiphase é aceito**, Turbulent > Large Eddy Simulation (desligar o Auto-select para escolher a submalha). Wall: All y+ ou Low y+. Convecção **Bounded-Central** (fator de mistura com upwind). Field functions: Turbulent Viscosity, SGS TKE. | Confirmar na GUI se, com EMP, o LES aparece com **Mixture Turbulence** ou só com Phasic. |
+| LES Guidelines | Malha: corte no subintervalo inercial, **k_resolvido/k_sgs > 5 (ideal > 20)**; estimar o tamanho de célula a partir do RANS pelas escalas de **Kolmogorov e Taylor** (field functions do RANS); CFL ≈ 1; 2ª ordem no tempo; BCD; ~15 iterações internas; **inicializar a partir do RANS**; descartar 2–5 tempos de passagem antes de amostrar; monitores de Field Mean e **Field Variance** de u, v, w. | Plano da etapa F (no guia de setup). |
+
+**Ponto crítico do LES Euler–Euler:** o filtro da LES e a média das fases convivem. A literatura recomenda célula **Δ ≳ d_b** (critério de Milelli et al., Δ/d_b ≳ 1,2–1,5), senão o campo de α_G fica mal definido na escala da célula. Com d_b = 5,5 mm, isso dá **Δ ≈ 5–8 mm**, ou seja, a nossa malha atual de 5 mm é um "LES grosso" coerente com Euler–Euler. A malha de 2,5 mm de Darmana só faz sentido porque ele usou Euler–Lagrange (bolhas pontuais).
