@@ -91,3 +91,32 @@ As unidades Chemkin são mol, cm³ e s. A R2 é ~10⁶ vezes mais rápida que a 
 4. **E local em field function, pela fórmula explícita de DeCoursey (1974):** E = −Ha²/[2(Ei−1)] + √{Ha⁴/[4(Ei−1)²] + Ei·Ha²/(Ei−1) + 1}, com Ha = √(k₁[OH⁻]D_CO₂)/k_L e Ei = 1 + D_OH[OH⁻]/(2D_CO₂C*). **Conferida contra van Krevelen–Hoftijzer** (`cinetica_projeto.fator_aumento`): diferença de 1–5 % entre Ha = 0,3 e 10 e Ei = 1,2 e 50. É a mesma família de modelos comparada por Krauß & Rzehak (2017).
 
 **Páginas que faltam:** *User-Defined Interphase Mass Flux* (unidades, como se escolhe a espécie, se a área a entra automaticamente); *Modeling Interphase Reactions*; teoria das Eqs. 2104, 2106 e 2108 (Henry e taxa de dissolução).
+
+## Lote 7: Interphase Reaction (EMP), que fecha a rota da absorção
+
+| Página | O que traz | Uso no nosso caso |
+|---|---|---|
+| Modeling Interphase Reactions | Continuum: **Phase Coupled Fluid Energy**. Interação: Energy (Segregated Fluid Enthalpy ou Temperature), **Reaction Regime = Reacting**, *Interphase Mass Transfer > Interphase Reaction*. Reações criadas no GUI (reagentes e produtos, coeficiente estequiométrico, **expoente de taxa**) e coeficiente da taxa em *Properties > Reaction Coefficient*. | Duas "reações" interfaciais irreversíveis: **(I1) CO₂(G) → CO₂(L)** e **(I2) CO₂(L) → CO₂(G)**, cada uma com expoente 1 no reagente. |
+| Interphase Reaction Model Reference (EMP) | Exige as duas fases **multicomponentes** e energia por fase (Segregated Fluid Enthalpy ou Temperature). Métodos: *Diffusion Limited User Reaction Rate* (mín. entre cinética e difusão), First/Half/Second-Order Combined Rate (partícula–gás) e **User Reaction Coefficient, que funciona como *scalar profile*** (portanto aceita field function). | **User Reaction Coefficient por field function**, sem código C. |
+| Interphase Reactions (teoria) | **Eq. 3569: ω = k·Π[X_j]^{r_j}·a_cd**. O termo k·Π[X]^r deve estar em **kmol/(m²·s)**, e a densidade de área interfacial a_cd (*Interaction Area Density*) é multiplicada **automaticamente**. Se a taxa for por volume, dividir por `$InteractionAreaDensityPhaseInteraction1`. Diffusion-limited (Eqs. 3571–3574): K_D = Sh·D/L, ω = mín(R, F·ρ·K_D·Y·A). | Com expoente 1 e [X] em kmol/m³, **k tem unidade de m/s**: I1: k = **k_L·E/He**; I2: k = **k_L·E**. Assim ω_líq = k_L·E·a·(C_G/He − C_L), exatamente o fluxo do modelo 0D, com E local de DeCoursey. |
+
+### Rota definida (documentação do STAR completa no essencial)
+
+1. **Continuum:** 3D; Implicit Unsteady; Multiphase; EMP; Mixture Turbulence (Realizable k-ε Two-Layer); Gravity; **Phase Coupled Fluid Energy**.
+2. **Fase gás (dispersa):** Multi-Component Gas: CO₂ (+ N₂ inerte opcional, para evitar fração mássica unitária); Segregated Fluid Enthalpy; Non-reacting; densidade constante (≈ 1,8 kg/m³).
+3. **Fase líquida (contínua):** Multi-Component Liquid: H₂O, CO₂(aq), OH⁻, HCO₃⁻, CO₃²⁻, Na⁺; Segregated Fluid Enthalpy; **Reacting > Reacting Species Transport > Complex Chemistry + Laminar Flame Concept**. R1 e R2 reversíveis (Arrhenius direto e reverso). **Clustering desligado**.
+4. **Interação Água–CO₂:** Tomiyama (drag), lift, VM, TD; *Interaction Length Scale* constante ou S-Gamma; **Interphase Mass Transfer > Interphase Reaction**: I1 e I2 com *User Reaction Coefficient* por field function.
+5. **Field functions:**
+   - u_rel = |u_G − u_L|;
+   - k_L (Higbie) = 2·√(D_CO₂·u_rel/(π·d));
+   - [OH⁻] = ρ_L·Y_OH/M_OH;
+   - C_G = ρ_G·Y_CO₂/M_CO₂ e C* = C_G/He;
+   - Ha = √(k₁·[OH⁻]·D_CO₂)/k_L;
+   - Ei = 1 + D_OH·[OH⁻]/(2·D_CO₂·C*);
+   - E (DeCoursey);
+   - pH a partir do balanço de cargas, ou −log₁₀(K_w/[OH⁻]) enquanto pH > 9.
+6. **Contornos:** aspersor = velocity inlet (entrada diluída); topo = Phase Permeable para o gás; paredes sem escorregamento.
+
+**Nota de modelagem.** O E aplicado à transferência mais a reação no seio não contam a reação em dobro. O filme é submalha: E corrige o fluxo e a reação no seio consome o CO₂ que chega, preservando a estequiometria. Essa é a formulação de Krauß & Rzehak (2017, 2018). Diferença conhecida: o modelo 0D usava k_L(E·C* − C_L); aqui fica k_L·E·(C* − C_L). As duas coincidem quando C_L ≪ C*.
+
+**Páginas opcionais, se aparecerem:** *Interaction Area Density Model Reference* (fórmula de a_cd, em especial com S-Gamma); *Complex Chemistry Model Reference* (tolerâncias do CVODE, onde desligar o Clustering); *Defining Chemical Reactions Manually* (as R1 e R2 podem ser criadas no GUI, sem arquivo Chemkin, e os dados de componente como entalpia de formação e cp entram no próprio GUI).
