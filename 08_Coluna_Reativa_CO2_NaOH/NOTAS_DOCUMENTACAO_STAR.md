@@ -53,3 +53,22 @@ Este arquivo registra o que cada página da documentação oferece ao nosso caso
 2. *Reacting Species Transport Workflow* (reação intrafase numa fase Euleriana).
 3. *Interphase Mass Transfer* do EMP (rota A): modelos disponíveis e se aceitam field function.
 4. *Defining Chemical Reactions Manually* ou *Importing Species and Reactions* (unidades de A para espécies em solução).
+
+## Lote 5: Reacting Species Transport, Complex Chemistry e EMP
+
+| Página | O que traz | Uso no nosso caso |
+|---|---|---|
+| Reacting Species Transport (teoria) | Transporte das frações mássicas de todas as espécies, com um solver químico separado (CVODE). **Complex Chemistry** = cinética finita geral. Opções de interação turbulência–química: **Laminar Flame Concept** (LFC: taxa avaliada no estado médio da célula; para reações lentas ou transientes), EDC e TFC. O modelo de polimerização roda numa **fase líquida multicomponente do EMP**. | Reação na fase líquida via Complex Chemistry + LFC. EDC e TFC são para chamas. |
+| Reacting Species Transport Workflow | "Para reações **líquido–líquido** limitadas por cinética finita: **Complex Chemistry**." Reações simples e rápidas com mistura lenta: Eddy Contact Micromixing. Mecanismo importado no nó Complex Chemistry ou criado em *Reacting > Reactions*. *Relax to Chemical Equilibrium* opcional. | **Rota intrafase:** fase líquida = Multi-Component Liquid + Reacting + Reacting Species Transport + Complex Chemistry + LFC. |
+| Chemistry Acceleration | **Clustering ativo por padrão**, com variáveis de agrupamento de **combustão**: razão de equivalência, temperatura, fração mássica de OH. Alternativas: ISAT (até ~40 espécies, ideal em regime permanente) e DMR. | ⚠️ **Desligar o Clustering** (ou trocar as variáveis por frações de OH⁻/CO₂). Nosso sistema é isotérmico e sem "combustível": o agrupamento padrão juntaria células com químicas diferentes. São só 6 espécies e a malha é pequena, então o CVODE puro é barato. |
+| Multiphase Complex Chemistry Workflow | Continuum: EMP ou MMP, **3D**, **Implicit Unsteady**, *Multiphase Complex Chemistry*. Importa **mecanismo multifásico + arquivo termodinâmico** (com fases G, L e S), **sem arquivo de transporte**. As espécies povoam as fases automaticamente. Nas fases: *Reaction Regime* = **Non-reacting** (a química fica no nível do continuum). | **Rota multifásica:** absorção (CO₂ G→L) e reações num único mecanismo. **Exige arquivo termodinâmico** com polinômios NASA também para os íons (dá para usar cp constante: o caso é isotérmico e as reversas são por **REV**, sem equilíbrio termodinâmico). **3D obrigatório**, o que serve à coluna de Darmana (pseudo-2D, mas com espessura de 3 cm). |
+| Modeling Eulerian Multiphase Flow | Fases podem ser **Multi-Component Liquid/Gas**. Condições iniciais por fração mássica ou molar de cada componente. Fontes de massa por região/fase. Relatório *Normalized Phase Mass Conservation Error*. *Adaptive Time-Step* disponível. A interação entre fases inclui "**models for the rates of interphase transfer of mass**". | Água multicomponente. Monitorar o erro de conservação de massa da fase, que é crítico porque o gás perde massa ao dissolver. Falta a página de transferência de massa entre fases. |
+
+### Constantes cinéticas a 25 °C (força iônica desprezada; a conferir com Darmana / Krauß & Rzehak)
+
+| Reação | k direta | K_eq | k reversa | Tempo característico a [OH⁻] = 0,0316 M |
+|---|---|---|---|---|
+| R1: CO₂ + OH⁻ ⇌ HCO₃⁻ | 8,05×10³ L/(mol·s) = **8,05×10⁶ cm³/(mol·s)** (Pohorecki & Moniuk) | 4,47×10⁷ L/mol | **1,8×10⁻⁴ s⁻¹** | 3,9 ms |
+| R2: HCO₃⁻ + OH⁻ ⇌ CO₃²⁻ + H₂O | ~6×10⁹ L/(mol·s) (ordem de grandeza; conferir) | 4,68×10³ L/mol | 1,28×10⁶ s⁻¹, ou seja, **A_rev = 2,3×10⁷ cm³/(mol·s)** se a reversa incluir [H₂O] = 55,5 M (ou RORD H₂O 0) | 5×10⁻⁹ s (equilíbrio instantâneo) |
+
+As unidades Chemkin são mol, cm³ e s. A R2 é ~10⁶ vezes mais rápida que a R1, então o sistema é rígido e o CVODE é obrigatório. Íons como pseudo-espécies neutras (OHM, HCO3M, CO3MM, NAP): as reações ficam balanceadas em elementos sem o elétron, pois a carga se conserva em cada reação.
