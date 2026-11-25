@@ -299,3 +299,33 @@ Motivação: K&R concluem que o atraso de ~20 % no pH vem da **hidrodinâmica RA
 | Estatística | Field Mean de α_G e u_G; **Field Variance** de u, v, w (Reynolds normais); 60 s de amostragem para N₂ |
 | Comparação | f_pluma, α_G, perfis em y = 750 mm (RANS × LES × experimento). Depois, com CO₂: pH(t) e d32(z) |
 | Custo | ~3–5× o RANS na mesma malha (passo menor e central) |
+
+---
+
+## 12. Field functions definitivas (versão usada na etapa B)
+
+Constantes já embutidas (25 °C): ρ_L = 997,05; μ_L = 8,907e-4; D_CO2 = 1,918e-9; He = 0,823; δ = 1,661; k_I+ = 8288 m³/(kmol·s); K_W = 9,878e-15.
+Sem `max()`: as proteções usam operadores condicionais. Os nomes de campo do STAR (`$...`) devem ser inseridos pela lista do editor.
+
+| # | Nome | Dimensão | Definição |
+|---|---|---|---|
+| 1 | C_OH | — | `997.05 * [Mass Fraction OHM (Agua)] / 17.007` |
+| 2 | C_CO2L | — | `997.05 * [Mass Fraction CO2L (Agua)] / 44.01` |
+| 3 | C_G | — | `1.799 * [Mass Fraction CO2 (Gas)] / 44.01` |
+| 4 | urel | — | `mag([Velocity (Gas)] - [Velocity (Agua)])` |
+| 5 | dB | — | `([Sauter Mean Diameter (Gas)] > 1e-4) ? [Sauter Mean Diameter (Gas)] : 1e-4` |
+| 6 | kL | — | `1.918e-9/${dB} * (2 + 1.10613*pow(1.11940e6*${urel}*${dB}, 0.89))` (Brauer) |
+| 7 | Ha | — | `sqrt(8288*1.918e-9*((${C_OH} > 0) ? ${C_OH} : 0)) / ${kL}` |
+| 8 | CAi | — | `(0.823*${C_G} > 1e-8) ? 0.823*${C_G} : 1e-8` |
+| 9 | chi | — | `(${C_OH}/(2*${CAi})*1.661 > 50) ? 50 : ((${C_OH}/(2*${CAi})*1.661 < 1e-10) ? 1e-10 : ${C_OH}/(2*${CAi})*1.661)` |
+| 10 | Ea | — | `1 + ${chi}/1.661*(1 + 0.3305*(0.63662*atan(0.31416*log(exp(${chi}) - 1)) + 1))` |
+| 11 | E_bruto | — | `-pow(${Ha},2)/(2*(${Ea}-1)) + sqrt(pow(${Ha},4)/(4*pow(${Ea}-1,2)) + ${Ea}*pow(${Ha},2)/(${Ea}-1) + 1)` |
+| 12 | E | — | `(${Ea} - 1 < 1e-6) ? 1 : ((${E_bruto} > 1) ? ${E_bruto} : 1)` |
+| 13 | aL | — | `([Volume Fraction (Agua)] > 0.5) ? [Volume Fraction (Agua)] : 0.5` |
+| 14 | **k_abs** | **Velocity** | `${E}*${kL}*0.823/${aL}` |
+| 15 | **k_des** | **Velocity** | `${E}*${kL}/${aL}` |
+| 16 | pH | — | `-log10(9.878e-15/((${C_OH} > 1e-20) ? ${C_OH} : 1e-20))` |
+| 17 | Y_CO2_entrada | — | `($Time >= 20) ? 1 : 0` |
+| 18 | Y_N2_entrada | — | `1 - ${Y_CO2_entrada}` |
+
+Verificação: com d_B = 3,5 mm e u_rel = 0,23 m/s, k_L = 2,60e-4 m/s, como no modelo pontual e em K&R (≈ 2,5e-4).
