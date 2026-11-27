@@ -284,21 +284,24 @@ Ao chegar a cada etapa, mande os CSV, como fizemos com a coluna anterior.
 
 ---
 
-## 11. Etapa F: LES (planejamento)
+## 11. Etapa F: LES (o que funcionou na GUI do 2602)
 
-Motivação: K&R concluem que o atraso de ~20 % no pH vem da **hidrodinâmica RANS**: a frequência da pluma sai baixa (0,14 Hz contra 0,17 Hz) e o tempo de residência das bolhas sai curto. A LES Euler–Lagrange de Darmana acerta a frequência. A pergunta da etapa F é **quanto do pH melhora só trocando RANS por LES**, com a mesma química.
+Motivação: K&R atribuem o atraso de ~20 % no pH à **hidrodinâmica RANS** (frequência da pluma baixa, tempo de residência das bolhas curto). Pergunta da etapa F: **quanto o pH melhora só trocando RANS por LES**, com a mesma química e a mesma física interfacial.
 
 | Item | Ajuste |
 |---|---|
-| Modelo | Turbulent > **Large Eddy Simulation > WALE Subgrid Scale**, All y+ (desligar o Auto-select). Verificar se o EMP aceita com Mixture Turbulence |
-| Malha | **base = 5 mm (a mesma do RANS)** e uma variante de 4 mm. Critério Euler–Euler: Δ ≳ d_b (Milelli). Não usar 2,5 mm (menor que a bolha) |
-| Verificação | No RANS da etapa A, plotar *Taylor Micro Scale* e *Kolmogorov Length Scale* no plano z = 0. No LES, k_res/k_sgs > 5, com k_res das Field Variances de u, v, w e k_sgs de *SGS Turbulent Kinetic Energy* |
-| Convecção | **Bounded-Central** no momento (fator de upwind padrão); fração volumétrica como no RANS |
-| Tempo | 2ª ordem; **Δt = 2–2,5 ms** (CFL ≈ 0,5–1 com u ~ 0,5 m/s); ≤ 15 iterações internas |
-| Início | do **.sim RANS em t = 20 s** (troca de modelo no mesmo arquivo); descartar ~15 s (≈ 2 passagens da pluma) |
-| Estatística | Field Mean de α_G e u_G; **Field Variance** de u, v, w (Reynolds normais); 60 s de amostragem para N₂ |
-| Comparação | f_pluma, α_G, perfis em y = 750 mm (RANS × LES × experimento). Depois, com CO₂: pH(t) e d32(z) |
-| Custo | ~3–5× o RANS na mesma malha (passo menor e central) |
+| Arquivo | Save As do `Darmana_etapaB_1@2.40000e+02` → `Darmana_LES.sim`; Clear Solution |
+| Inicialização | **Hidrodinâmica do RANS de N₂ (etapa A) por tabela XYZ**: Tools > Tables > XYZ Internal com Volume Fraction (Agua, Gas), Static Pressure e Velocity [i, j, k] das duas fases → Export CSV → File Table no LES → condições iniciais em *Table (x,y,z)*. Composição do líquido, temperatura e S-Gamma ficam nas condições iniciais (química nova, pH 12,5) |
+| Troca para CO₂ | `Y_CO2_entrada = ($Time >= 8) ? 1 : 0` (pluma já formada; ~2–3 passagens de 3 s para os vórtices resolvidos). Na análise, t_exp = t − 8 s |
+| Turbulência | ⚠️ **Desligar o Auto-select antes de mexer** (com ele ligado, a cascata derrubou o EMP). Desmarcar de baixo para cima: Two-Layer All y+ → Realizable K-ε Two-Layer → K-Epsilon → RANS. **Mixture Turbulence só aceita RANS**: desmarcar e escolher **EMP Turbulence = Phasic Turbulence**. Em cada fase (Agua e Gas): **Large Eddy Simulation > WALE Subgrid Scale** (padrões C_w = 0,544, C_t = 3,5, κ = 0,41, Limit Length Scale ligado) |
+| Física interfacial | Igual ao RANS. **LES Particle Induced Turbulence desligado** (o RANS também não tinha fonte de turbulência induzida por bolhas), sem breakup/coalescência |
+| Malha | 5 mm (a mesma do RANS). Critério Euler–Euler: Δ ≳ d_b (Milelli) |
+| Convecção | **Bounded-Central** no momento; fração volumétrica e espécies como no RANS |
+| Tempo | 2ª ordem; **Δt = 5 ms** (igual ao RANS): com Δ = 5 mm e u ≲ 0,6 m/s, CFL ≈ 0,6, perto do CFL ≈ 1 do guideline. Reduzir para 4 ms se CFL_max > 1 |
+| Estatística | Field Mean de α_G, u_G e d32; **Field Variance** de u, v, w da Agua; início 20 s após a troca (t = 28 s, passo 5600); exportar perfis em t = 103 s (janela de K&R, 20–95 s após a troca) e continuar até 200 s para o pH |
+| Verificação | k_res/k_sgs > 5, com k_res das Field Variances e k_sgs de *SGS Turbulent Kinetic Energy* |
+| Comparação | f_pluma, α_G, perfis em y = 750 mm, pH(t), d32(z): LES × RANS × experimento × K&R |
+| Custo | ~40 mil passos (o mesmo número do RANS); o WALE é algébrico, então o custo por passo é parecido |
 
 ---
 
